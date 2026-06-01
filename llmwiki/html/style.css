@@ -589,3 +589,77 @@ input[type="text"]:focus, select:focus {
 
 .toast.success { border-color: var(--accent-green); }
 .toast.info { border-color: var(--accent-cyan); }
+
+/* Raw Message List in Live Chat Crawler */
+.raw-message-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    transition: var(--transition);
+}
+
+.raw-message-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(124, 77, 255, 0.2);
+}
+
+.raw-message-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.raw-message-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    color: var(--text-secondary);
+}
+
+.raw-message-text {
+    color: var(--text-primary);
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.raw-platform-badge {
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.raw-platform-badge.slack { background: rgba(224, 30, 90, 0.15); color: #e01e5a; }
+.raw-platform-badge.ms-teams { background: rgba(99, 102, 241, 0.15); color: #6366f1; }
+.raw-platform-badge.zalo { background: rgba(0, 229, 255, 0.15); color: #00e5ff; }
+.raw-platform-badge.self-chat { background: rgba(255, 64, 129, 0.15); color: #ff4081; }
+
+.btn-extract {
+    background: rgba(124, 77, 255, 0.08);
+    color: var(--accent-cyan);
+    border: 1px solid rgba(0, 229, 255, 0.15);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    white-space: nowrap;
+}
+
+.btn-extract:hover {
+    background: var(--grad-primary);
+    color: #ffffff;
+    border-color: transparent;
+    transform: translateY(-1px);
+}
+

@@ -1,0 +1,26 @@
+[
+    {
+        "id": "task-551a2330",
+        "title": "làm giúp tôi báo cáo doanh thu tuần trước thứ Sáu nhé.",
+        "requester": "Sếp Hoàng",
+        "assignee": "Bình",
+        "deadline": "trước thứ Sáu nhé.",
+        "priority": "Medium",
+        "source": "Slack - #general",
+        "status": "Pending Review",
+        "created_at": 1780305337.459027,
+        "synced_to_notion": false
+    },
+    {
+        "id": "task-d2b786fe",
+        "title": "Cần gấp: Anh An cấu hình cổng webhook bảo mật trước 12:00 ngày mai nha.",
+        "requester": "Lê Thị Thu",
+        "assignee": "Unassigned",
+        "deadline": "trước 12:00 ngày mai nha.",
+        "priority": "High",
+        "source": "MS Teams - #security",
+        "status": "Pending Review",
+        "created_at": 1780305337.4592068,
+        "synced_to_notion": false
+    }
+]

@@ -28,10 +28,11 @@ TaTa/
 │   ├── orchestrator.py       # Bộ điều phối AI Orchestrator
 │   ├── sync.py               # Công cụ đồng bộ lên Notion (Sync Engine)
 │   └── cron_scanner.py       # Công cụ quét lịch sử chat tự động
-├── html/                     # Giao diện Dashboard quản trị trực quan (Vanilla HTML/CSS/JS)
-│   ├── index.html            # Cấu trúc Dashboard Glassmorphism
-│   ├── style.css             # Thiết kế giao diện Dark Mode & Hiệu ứng neon
-│   └── app.js                # Xử lý tương tác & Kết nối API Realtime
+├── llmwiki/                  # Thư mục chứa tài liệu wiki & các template tĩnh
+│   ├── html/                 # Giao diện Dashboard quản trị trực quan (Vanilla HTML/CSS/JS)
+│   │   ├── index.html        # Cấu trúc Dashboard Glassmorphism
+│   │   ├── style.css         # Thiết kế giao diện Dark Mode & Hiệu ứng neon
+│   │   └── app.js            # Xử lý tương tác & Kết nối API Realtime
 ├── wiki/                     # Kho tri thức của Agent (Knowledge Base)
 │   ├── concepts/             # Các khái niệm hệ thống
 │   ├── entities/             # Các thực thể hệ thống
@@ -71,7 +72,7 @@ API docs sẽ có tại: `http://localhost:8000/docs`
 Endpoint kiểm tra sức khỏe hệ thống: `http://localhost:8000/health`
 
 ### 5. Khởi chạy Dashboard Frontend
-Mở trực tiếp file `html/index.html` trong bất kỳ trình duyệt web nào, hoặc chạy một local server để xem (ví dụ: dùng extension Live Server của VS Code, hoặc lệnh `python -m http.server` trong thư mục `html/`).
+Mở trực tiếp file `llmwiki/html/index.html` trong bất kỳ trình duyệt web nào, hoặc chạy một local server để xem (ví dụ: dùng extension Live Server của VS Code, hoặc lệnh `python -m http.server` trong thư mục `llmwiki/html/`).
 
 Giao diện Dashboard hỗ trợ:
 *   Theo dõi và đồng bộ realtime với API Backend.

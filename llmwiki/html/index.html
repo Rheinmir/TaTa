@@ -86,6 +86,34 @@
                     </button>
                     <div id="scan-feedback" class="feedback-msg"></div>
                 </div>
+
+                <!-- Live Chat Crawler / Claim Panel -->
+                <div class="control-section">
+                    <h3><i class="fa-solid fa-satellite-dish"></i> Live Chat Crawler (Bắt dữ liệu thô)</h3>
+                    <p class="info-text">Kết nối thu thập và hiển thị các luồng tin nhắn thô vừa crawl được trước khi chuyển giao cho AI trích xuất.</p>
+                    <button id="btn-claim-raw" class="btn btn-secondary" style="margin-bottom: 16px;">
+                        <i class="fa-solid fa-circle-nodes"></i> <span>Kết nối & Crawl tin nhắn thô</span>
+                    </button>
+                    
+                    <div id="raw-message-list" class="raw-message-list" style="display: flex; flex-direction: column; gap: 8px; max-height: 250px; overflow-y: auto; padding-right: 4px;">
+                        <div style="font-size: 11px; color: var(--text-secondary); text-align: center; padding: 10px;">Chưa có dữ liệu thô. Hãy nhấp kết nối để crawl.</div>
+                    </div>
+                <!-- MS Teams Interactive Auth Panel -->
+                <div class="control-section">
+                    <h3><i class="fa-brands fa-microsoft"></i> Liên kết Microsoft Teams</h3>
+                    <p class="info-text">Sử dụng tài khoản cá nhân để liên kết và quét tin nhắn Teams thời gian thực thông qua Device Code Flow.</p>
+                    <button id="btn-teams-auth" class="btn btn-secondary">
+                        <i class="fa-solid fa-key"></i> <span>Bắt đầu liên kết tài khoản</span>
+                    </button>
+                    
+                    <div id="teams-auth-card" class="glass-card" style="display: none; margin-top: 12px; padding: 16px; border: 1px dashed rgba(124, 77, 255, 0.4); background: rgba(124, 77, 255, 0.03);">
+                        <p style="font-size: 11px; margin-bottom: 8px; color: var(--text-secondary);">1. Truy cập liên kết đăng nhập:</p>
+                        <a id="teams-auth-link" href="#" target="_blank" class="badge" style="display: block; text-align: center; text-transform: none; margin-bottom: 12px; font-size: 12px; padding: 8px;">Đang lấy link...</a>
+                        <p style="font-size: 11px; margin-bottom: 8px; color: var(--text-secondary);">2. Nhập mã thiết bị dưới đây:</p>
+                        <div id="teams-auth-code" style="font-size: 20px; font-weight: 800; text-align: center; letter-spacing: 2px; color: var(--accent-cyan); background: rgba(0, 229, 255, 0.05); padding: 8px; border-radius: 6px; margin-bottom: 12px; font-family: monospace;">---</div>
+                        <div id="teams-auth-status" style="font-size: 11px; text-align: center; color: var(--text-secondary);"><i class="fa-solid fa-spinner fa-spin"></i> Đang chờ xác thực...</div>
+                    </div>
+                </div>
             </div>
 
             <!-- Main Panel: Supabase Queue List -->
