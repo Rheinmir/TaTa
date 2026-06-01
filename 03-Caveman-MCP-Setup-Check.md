@@ -1,22 +1,22 @@
 # CONTEXT
-Before writing the core application, we need to ensure the **Caveman Memory MCP** is installed and configured on this machine.
+Trước khi viết app, phải kiểm tra Caveman đã sẵn sàng chưa.
 
-# INSTRUCTIONS
-1. CHECK if Caveman is installed by running: `pip show caveman` or `python -c "import caveman"`.
-   - IF the command itself fails (pip/python not found): STOP. Tell the user the exact error and ask them to check their Python environment. Do not proceed until user says "tiếp tục", then RE-RUN this check — do not skip it.
-   - IF Caveman is NOT installed: STOP. Tell the user: "⚠️ Caveman chưa được cài. Chạy `pip install caveman` rồi gõ 'tiếp tục'." Do not proceed until user says "tiếp tục", then RE-RUN this check — do not skip it.
-   - IF Caveman IS installed: continue to step 2.
+# PHẢI LÀM
+1. CHECK Caveman có chưa: `pip show caveman` hoặc `python -c "import caveman"`.
+   - Lệnh lỗi (pip/python không có): DỪNG. Báo lỗi, yêu cầu kiểm tra Python environment. Đợi người dùng gõ "tiếp tục" rồi CHẠY LẠI — không được bỏ qua.
+   - Caveman CHƯA cài: DỪNG. Nói: "⚠️ Caveman chưa cài. Chạy `pip install caveman` rồi gõ 'tiếp tục'." Đợi "tiếp tục" rồi CHẠY LẠI — không được bỏ qua.
+   - Caveman ĐÃ cài: tiếp bước 2.
 
-2. Attempt a connection test immediately — initialize the Caveman client and call a basic ping/health method to verify Neo4j and Supabase are reachable. Caveman may have credentials persisted internally even if env vars appear empty.
-   - If the test passes: tell the user "✅ Caveman MCP kết nối thành công." and proceed to step 04. Do not block on missing env vars.
-   - If the test fails: continue to step 3.
+2. Test kết nối ngay — khởi tạo Caveman client, gọi ping/health để xác nhận Neo4j và Supabase liên lạc được. Caveman có thể lưu credentials sẵn trong bộ nhớ dù env vars có vẻ trống.
+   - Thành công: nói "✅ Caveman MCP kết nối thành công." rồi qua bước 04. Đừng chặn vì env vars thiếu.
+   - Thất bại: tiếp bước 3.
 
-3. Connection failed — now check why. For each of `LLM_API_KEY`, `GRAPH_DATABASE_PASSWORD`, `VECTOR_DB_PASSWORD`:
-   - Check system/shell environment variables first.
-   - If not found, check `.env.caveman` file (if file does not exist, treat as missing).
-   - Report exactly which variables are missing and which service each maps to (LLM / Neo4j / Supabase).
-   - Show the original connection error alongside the missing variables.
-   - STOP. Do not proceed until user says "tiếp tục", then RE-RUN from step 2 — do not skip straight to success.
+3. Kết nối fail — kiểm tra từng cái: `LLM_API_KEY`, `GRAPH_DATABASE_PASSWORD`, `VECTOR_DB_PASSWORD`:
+   - Kiểm tra system/shell env vars trước.
+   - Không có → kiểm tra file `.env.caveman` (không có file = coi như thiếu).
+   - Báo chính xác cái nào thiếu, mỗi cái nối với dịch vụ gì (LLM / Neo4j / Supabase).
+   - Hiện lỗi kết nối gốc cùng các biến thiếu.
+   - DỪNG. Đợi "tiếp tục" rồi CHẠY LẠI từ bước 2 — không được nhảy thẳng đến thành công.
 
-# ACTION
-Execute the logic above now. Check the configuration state and act accordingly.
+# LÀM ĐI
+Chạy logic trên ngay. Kiểm tra trạng thái cấu trúc và hành động theo kết quả.

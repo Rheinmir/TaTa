@@ -1,105 +1,103 @@
 # CONTEXT
-We have defined the project goals and tech stack. Now, we must establish the Agentic Knowledge Base following the LLM Wiki pattern — a persistent, compounding artifact that the agent maintains over time. Humans curate raw sources; the agent handles summarization, cross-referencing, and maintenance.
+Đã có mục tiêu và stack. Giờ phải dựng kho tri thức — nơi lưu mọi thứ dự án biết.
 
-The knowledge base has three layers:
-- **`raw/`** — immutable source documents. Humans write here, agent never touches.
-- **`wiki/`** — agent-maintained markdown pages: entities, concepts, sources. The agent owns this layer.
-- **`AGENT.md`** — the schema: defines structure, conventions, and the three core operations (ingest, query, lint).
+3 lớp:
+- **`raw/`** — tài liệu gốc. Con người viết, bot KHÔNG BAO GIỜ đụng.
+- **`wiki/`** — bot tự duy trì: khái niệm, thực thể, nguồn tham khảo.
+- **`AGENT.md`** — luật chơi: cấu trúc, cách hoạt động, 3 thao tác chính (ăn, hỏi, dọn).
 
-# INSTRUCTIONS
+# PHẢI LÀM
 
-**IMPORTANT — before doing anything else:** Do NOT create any `.md` documentation or knowledge files in the project root. The only `.md` files allowed in root are: `AGENT.md`, `README.md`, and numbered step files (e.g. `01-*.md`).
+**QUAN TRỌNG:** Đừng tạo file `.md` lung tung ở root. Chỉ được có `AGENT.md`, `README.md`, và file số (`01-*.md`, `02-*.md`).
 
-You must execute the following file system operations:
+1. Tạo thư mục ở root:
+   - `skills/` — workflow nhiều bước bot tự chạy (vd: `propose`, `safe-change`).
+   - `commands/` — lệnh người dùng gọi trực tiếp (vd: `scaffold-feature`).
+   - `html/` — dashboard, báo cáo trực quan.
 
-1. Create the following folders directly in the project root (note: `.agent` already exists as a config file — do not create a `.agent/` folder):
-   - `skills/` — multi-step reusable workflows the agent invokes autonomously (e.g. `propose`, `safe-change`).
-   - `commands/` — single-shot, parameterized instructions triggered explicitly by the user (e.g. `scaffold-feature`, `add-env-var`).
-   - `html/` — visual documentation layer (dashboard and rendered reports).
+2. Tạo `raw/` — **nguyên liệu gốc**:
+   - Con người bỏ tài liệu vào đây: spec, meeting notes, docs, ảnh, data.
+   - Bot KHÔNG viết, KHÔNG sửa, KHÔNG xóa gì trong `raw/`.
+   - Bot chỉ đọc `raw/` khi thực hiện thao tác `ingest`.
 
-2. Create a `raw/` folder in the root. This is the **immutable source-of-truth layer**:
-   - Humans drop original documents here: articles, specs, meeting notes, vendor docs, papers, images, data files.
-   - The agent NEVER writes, modifies, or deletes anything in `raw/`.
-   - The agent reads `raw/` only during the `ingest` operation to distill knowledge into `wiki/`.
+3. Tạo `wiki/` — **kho tri thức**. Chọn subfolder theo bảng:
 
-3. Create a `wiki/` folder. This is the **agent-maintained knowledge layer**. Use the table below to decide which subfolder:
+   | Subfolder | Khi nào | Ví dụ |
+   |-----------|---------|-------|
+   | `concepts/` | Khái niệm trừu tượng, pattern, thuật ngữ domain | `rag.md`, `graph-memory.md` |
+   | `entities/` | Cụ thể trong hệ thống: service, API, tool, component | `caveman.md`, `neo4j.md` |
+   | `sources/` | Tài liệu tham khảo, quyết định kỹ thuật từ `raw/` | `why-neo4j.md`, `caveman-docs.md` |
+   | `sources/draft/` | Proposal chưa làm (skill `propose` tạo) | `260425-new-approval-button-fe.md` |
 
-   | Subfolder | Put here when... | Example |
-   |-----------|-----------------|---------|
-   | `concepts/` | Abstract idea, pattern, or domain term — explained to a new team member, not pointed to in the codebase | `rag.md`, `graph-memory.md` |
-   | `entities/` | Concrete named thing in the system — service, model, API, tool, component, config | `caveman.md`, `neo4j.md` |
-   | `sources/` | Distilled reference or decision record from `raw/` — URL summary, ADR, paper takeaway | `why-neo4j.md`, `caveman-docs.md` |
-   | `sources/draft/` | Proposal not yet implemented (created by the `propose` skill) | `260425-new-approval-button-fe.md` |
-
-   Each wiki file must follow this format:
+   Mỗi file wiki phải theo format:
    ```
-   # <Title>
+   # <Tiêu đề>
    **Type:** concept | entity | source
    **Tags:** tag1, tag2
 
-   <1-3 sentence description>
+   <1-3 câu mô tả>
 
    ## Notes
-   <extra detail, [[wikilinks]] to related entries>
+   <chi tiết, [[wikilinks]] tới entry liên quan>
 
    ## Origin
    - **Source:** raw/<filename> | wiki/sources/draft/<filename> | https://...
-   - **Commit:** <hash> (if created from a code change)
+   - **Commit:** <hash>
    - **Date:** YYYY-MM-DD
    ```
-   A wiki file without `## Origin` is considered incomplete.
+   File không có `## Origin` = chưa xong.
 
-4. Create `wiki/index.md`:
+4. Tạo `wiki/index.md`:
    ```
    # Wiki Index
    | File | Type | Summary |
    |------|------|---------|
    ```
-   A row must be added every time a wiki file is created or removed.
+   Thêm mỗi lần tạo/xóa file.
 
-5. Create `wiki/log.md`:
+5. Tạo `wiki/log.md`:
    ```
    # Operation Log
    ## YYYY-MM-DD — <operation: ingest | query | lint | init> — <summary>
    - <detail>
    ```
-   Log today's initialization as the first entry.
+   Ghi lần khởi tạo đầu tiên.
 
-6. Create `AGENT.md` in the root with the following content:
+6. Tạo `AGENT.md` ở root:
 
-   **Rules:**
-   - NEVER write to `raw/`
-   - ALWAYS update `wiki/index.md` when adding or removing a wiki file
-   - ALWAYS append to `wiki/log.md` after every operation
-   - Use `[[wikilinks]]` to cross-reference entries in `wiki/`
-   - Wiki files live in `concepts/`, `entities/`, or `sources/` — never in `wiki/` root
-   - Wiki entries are only created AFTER code is committed — never during proposal or planning
+   **Luật:**
+   - KHÔNG BAO GIỜ ghi vào `raw/`
+   - LUÔN cập nhật `wiki/index.md` khi thêm/xóa file wiki
+   - LUÔN append `wiki/log.md` sau mỗi thao tác
+   - Dùng `[[wikilinks]]` để link giữa các trang
+   - File wiki sống trong `concepts/`, `entities/`, hoặc `sources/` — không được ở root `wiki/`
+   - Wiki chỉ tạo SAU KHI code đã commit — không tạo lúc đang lên plan
 
-   **Core operations** (read the skill file before invoking):
+   **3 thao tác chính** (đọc skill trước khi chạy):
 
-   | Operation | When to invoke | Skill file |
-   |-----------|---------------|------------|
-   | `ingest` | A new file appears in `raw/` | `llmwiki/skills/wiki-loop/ingest.md` |
-   | `query` | User asks a question that requires synthesizing wiki knowledge | `llmwiki/skills/wiki-loop/query.md` |
-   | `lint` | Periodically or when wiki feels stale | `llmwiki/skills/wiki-loop/lint.md` |
-   | `propose` | Any new feature or change is requested | `llmwiki/skills/dev-loop/propose.md` |
-   | `impact-check` | Before modifying any shared symbol | `llmwiki/skills/dev-loop/impact-check.md` |
-   | `safe-change` | Editing code called from more than one place | `llmwiki/skills/dev-loop/safe-change.md` |
-   | `verify-before-commit` | Before every commit | `llmwiki/skills/dev-loop/verify-before-commit.md` |
+   | Thao tác | Khi nào | Skill file |
+   |----------|---------|------------|
+   | `ingest` | File mới xuất hiện trong `raw/` | `llmwiki/skills/wiki-loop/ingest.md` |
+   | `query` | Người dùng hỏi cần tổng hợp từ wiki | `llmwiki/skills/wiki-loop/query.md` |
+   | `lint` | Định kỳ hoặc khi wiki trông cũ | `llmwiki/skills/wiki-loop/lint.md` |
+   | `propose` | Yêu cầu tính năng hoặc thay đổi | `skills/dev-loop/propose.md` |
+   | `impact-check` | Trước khi sửa shared code | `skills/dev-loop/impact-check.md` |
+   | `safe-change` | Sửa code nhiều nơi gọi | `skills/dev-loop/safe-change.md` |
+   | `verify-before-commit` | Trước mỗi commit | `skills/dev-loop/verify-before-commit.md` |
 
-   **Invocation rules:**
-   - New file in `raw/` → invoke `ingest` immediately
-   - New feature request → invoke `propose` first, stop, wait for approval
-   - Edit to shared code → invoke `impact-check` then `safe-change`
-   - Before every commit → invoke `verify-before-commit`
+   **Luật gọi:**
+   - File mới trong `raw/` → gọi `ingest` ngay
+   - Yêu cầu tính năng → gọi `propose` trước, dừng, chờ duyệt
+   - Sửa shared code → gọi `impact-check` rồi `safe-change`
+   - Trước mỗi commit → gọi `verify-before-commit`
 
-7. Scan the project root for any stray `.md` files that are NOT `AGENT.md`, `README.md`, or numbered step files (`01-*.md`, `02-*.md`, etc.).
-   - For each found: classify as concept, entity, or source; move to correct `wiki/` subfolder; add row to `wiki/index.md`; log the move in `wiki/log.md`.
-   - If none found: skip silently.
+7. Quét root tìm file `.md` lạ (không phải `AGENT.md`, `README.md`, `01-*.md`, `02-*.md`...):
+   - Nếu có: phân loại concept/entity/source, chuyển vào đúng subfolder `wiki/`, thêm vào `index.md`, ghi `log.md`.
+   - Nếu không: bỏ qua.
 
-# ACTION
-For each folder and file listed above:
-- IF it does not exist: create it exactly as specified.
-- IF it already exists: verify it contains the required sections and format. If anything is missing or malformed, fix only the missing parts — do not overwrite valid content.
+# LÀM ĐI
+Mỗi mục trên:
+- Chưa có → tạo đúng như mô tả.
+- Đã có → kiểm tra đúng format chưa. Thiếu gì thì sửa phần đó, đừng overwrite nội dung cũ.
 
-Reply with a checklist: each item marked ✅ (already valid), 🔧 (created or fixed), or ❌ (could not create — explain why).
+Trả về checklist: ✅ (đúng rồi), 🔧 (tạo mới/sửa), ❌ (không tạo được + lý do).

@@ -1,29 +1,29 @@
 # CONTEXT
-The architecture is set, the wiki is ready, and the database is configured. It's time to scaffold the MVP.
+Kiến trúc xong, wiki sẵn, database cấu hình xong. Giờ dựng khung app.
 
-# INSTRUCTIONS
-1. Read `AGENT-business.md` and `AGENT-code.md` to understand the project deeply.
-2. Generate the foundational folder structure for the chosen framework (e.g., MVC structure, React components folder, API routes, etc.).
-3. Write a `health` check endpoint or a basic landing page to verify the app runs.
-4. Create a `README.md` containing commands on how to run the project locally.
-5. Create `llmwiki/wiki/concepts/Architecture.md` following the standard wiki format:
+# PHẢI LÀM
+1. Đọc `AGENT-business.md` và `AGENT-code.md` để hiểu dự án.
+2. Tạo cấu trúc thư mục cho framework đã chọn (MVC, React components, API routes...).
+3. Viết endpoint `health` hoặc trang landing cơ bản để app chạy được.
+4. Tạo `README.md` hướng dẫn chạy local.
+5. Tạo `llmwiki/wiki/concepts/Architecture.md` theo format wiki:
    ```
    # Architecture
    **Type:** concept
    **Tags:** architecture, scaffold
 
-   <1-3 sentence description of the scaffolded structure and why it was chosen.>
+   <1-3 câu mô tả cấu trúc đã dựng và tại sao chọn thế>
 
    ## Notes
-   - [[link to related entities if any]]
+   - [[link tới entities liên quan]]
 
    ## Origin
    - **Source:** `AGENT-code.md`
-   - **Commit:** <hash of the scaffold commit>
-   - **Date:** <today>
+   - **Commit:** <hash của scaffold commit>
+   - **Date:** <hôm nay>
    ```
-    Add a row for this file in `llmwiki/wiki/index.md`.
-6. Add an entry to `llmwiki/wiki/log.md` detailing the components scaffolded today.
+   Thêm dòng cho file này vào `llmwiki/wiki/index.md`.
+6. Thêm entry vào `llmwiki/wiki/log.md` ghi lại những gì đã dựng hôm nay.
 
-# ACTION
-Scaffold the codebase, update the wiki, and present a summary of what was built. Ask the user what feature they want to build first.
+# LÀM ĐI
+Dựng codebase, cập nhật wiki, báo cáo tóm tắt. Hỏi người dùng muốn build tính năng nào trước.
