@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  tata-server:
+    build: .
+    container_name: tata-app-container
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./supabase_mock_db.json:/app/supabase_mock_db.json
+      - ./teams_token.json:/app/teams_token.json
+    environment:
+      - PORT=8000
+    restart: always

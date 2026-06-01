@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from typing import List, Optional
 import uvicorn
@@ -189,6 +190,9 @@ def trigger_cron_scan():
     """Kích hoạt quét lịch sử chat tự động."""
     new_tasks = scanner.run_cron_scan()
     return new_tasks
+
+# Serve static frontend dashboard from FastAPI directly
+app.mount("/", StaticFiles(directory="llmwiki/html", html=True), name="frontend")
 
 if __name__ == "__main__":
     uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)
