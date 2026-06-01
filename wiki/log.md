@@ -40,3 +40,10 @@
 - Thiết kế và triển khai cơ chế polling bất tuần tự (non-blocking) qua background thread độc lập để chờ lấy token mà không gây tắc nghẽn, đóng băng hoặc làm chậm FastAPI main thread.
 - Thực hiện chạy thử nghiệm live thành công, lấy được mã đăng nhập Microsoft Live thật (`5PV7RBN8`).
 - Cập nhật trang tri thức `wiki/sources/010626-teams-device-code-flow.md` để đồng bộ đặc tả kỹ thuật thực tế.
+
+## 2026-06-01 — feat — Tích hợp Docker và Hiện thực hóa giải pháp Automated RPA & Persistent SSH Bridge
+- Thiết kế và triển khai Dockerfile và docker-compose.yml phục vụ triển khai single-port (cổng 8000) chứa cả FastAPI Backend và Static Frontend Dashboard.
+- Tạo client cào tự động `app/teams_automated_crawler.py` (RPA) kết nối trực tiếp đến Teams Web để vượt qua các chính sách bảo mật khóa chặt của doanh nghiệp (như Coteccons).
+- Thiết lập endpoint tiếp nhận dữ liệu `/api/chat/push-raw` an toàn trên FastAPI backend.
+- Soạn thảo tài liệu và giải pháp tự động hóa kết nối SSH vào máy ảo WSL2 vĩnh viễn không cần mật khẩu tại `wiki/sources/010626-persistent-wsl-ssh-bridge.md`.
+- Đẩy toàn bộ thay đổi thành công lên GitHub repository để đồng bộ hóa deploy sang máy ảo WSL.
