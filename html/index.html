@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaTa - Team Automated Task Agent Dashboard</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="glass-bg"></div>
+    <div class="aurora-glow"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo-area">
+                <div class="logo-icon"><i class="fa-solid fa-robot"></i></div>
+                <div>
+                    <h1>TaTa</h1>
+                    <p class="subtitle">Team Automated Task Agent</p>
+                </div>
+            </div>
+            
+            <div class="status-panel">
+                <div class="status-indicator active" id="api-status">
+                    <span class="dot"></span> API Gateway
+                </div>
+                <div class="status-indicator active" id="db-status">
+                    <span class="dot"></span> Supabase Queue
+                </div>
+                <div class="status-indicator active" id="notion-status">
+                    <span class="dot"></span> Notion Sync
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Dashboard Grid -->
+        <div class="dashboard-grid">
+            <!-- Sidebar Panel: Control & Actions -->
+            <div class="control-panel glass-card">
+                <h2><i class="fa-solid fa-sliders"></i> Trung tâm điều khiển</h2>
+                <p class="section-desc">Giao việc thủ công hoặc kích hoạt các công cụ quét tự động của AI Agent.</p>
+                
+                <!-- Quick Self Chat input -->
+                <div class="control-section">
+                    <h3><i class="fa-solid fa-paper-plane"></i> Giao việc nhanh (Self-Chat)</h3>
+                    <form id="task-form">
+                        <div class="input-group">
+                            <label for="task-title">Mô tả công việc</label>
+                            <input type="text" id="task-title" placeholder="Ví dụ: Làm báo cáo tài chính trước 17:00 ngày mai..." required>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="input-group half">
+                                <label for="task-priority">Mức độ ưu tiên</label>
+                                <select id="task-priority">
+                                    <option value="Low">Thấp</option>
+                                    <option value="Medium" selected>Trung bình</option>
+                                    <option value="High">Cao</option>
+                                </select>
+                            </div>
+                            <div class="input-group half">
+                                <label for="task-assignee">Người thực hiện</label>
+                                <input type="text" id="task-assignee" placeholder="Để trống = Tự assign">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <span>Gửi tin nhắn (Self-chat)</span> <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Cron Scan trigger -->
+                <div class="control-section">
+                    <h3><i class="fa-solid fa-clock-rotate-left"></i> Auto Chat history scanner</h3>
+                    <p class="info-text">Chạy cron quét toàn bộ cuộc trò chuyện của các tài khoản được ủy quyền để tự động trích xuất các task bị bỏ quên.</p>
+                    <button id="btn-cron-scan" class="btn btn-secondary">
+                        <i class="fa-solid fa-magnifying-glass"></i> <span>Quét lịch sử chat ngay</span>
+                    </button>
+                    <div id="scan-feedback" class="feedback-msg"></div>
+                </div>
+            </div>
+
+            <!-- Main Panel: Supabase Queue List -->
+            <div class="queue-panel glass-card">
+                <div class="panel-header">
+                    <h2><i class="fa-solid fa-list-check"></i> Hàng đợi Supabase (Middle DB)</h2>
+                    <span class="badge" id="task-count">3 tasks</span>
+                </div>
+                <p class="section-desc">Toàn bộ task trích xuất bởi AI được lưu trữ tại đây làm buffer trước khi đồng bộ lên Notion.</p>
+
+                <div class="task-list" id="task-list-container">
+                    <!-- Dynamic tasks will be inserted here -->
+                    <div class="loading-state">
+                        <i class="fa-solid fa-circle-notch fa-spin"></i> Đang tải danh sách hàng đợi...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification system -->
+    <div id="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
