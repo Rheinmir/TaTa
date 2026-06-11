@@ -52,3 +52,8 @@
 ## 2026-06-11 — verify-before-commit — promote
 - Commit a599d54 (93 files): toàn bộ harness stack + llmwiki
 - Promote 5 draft → wiki/sources/ (Origin điền commit + date)
+
+## 2026-06-11 — install-harness — mode=migrate
+- Cài harness L0–L4 (validators, hooks, pre-commit, wiki-health, evals)
+
+## 2026-06-11 — harness-update — update xong, nợ backfill: 0 file (đã sạch từ trước)
