@@ -1,9 +1,9 @@
 # 110626-proposal-enforcement
 **Type:** draft
-**Status:** implemented — chờ verify-before-commit promote
+**Status:** promoted
 **Tags:** harness, R7, propose, enforcement
 **Proposed:** 2026-06-11
-**Sequence diagram (hoạt họa):** [html/110626-proposal-enforcement-seq.html](../../../html/110626-proposal-enforcement-seq.html) — một diagram cho TỪNG task bên dưới
+**Sequence diagram (hoạt họa):** [html/110626-proposal-enforcement-seq.html](../../html/110626-proposal-enforcement-seq.html) — một diagram cho TỪNG task bên dưới
 
 ## Plan
 - [ ] Task 1: Thêm **R7 proposal-complete** vào `harness/policy.yaml` + cập nhật `recipe.md`
@@ -41,3 +41,5 @@
 
 ## Origin
 - Audit 6 skill ngày 2026-06-11 theo yêu cầu force của user, tiếp nối [[100626-harness-enforcement-stack]]
+- **Commit:** a599d54 — harness: dựng lớp enforcement/audit/evals
+- **Date promoted:** 2026-06-11

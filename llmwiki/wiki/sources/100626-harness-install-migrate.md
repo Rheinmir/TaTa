@@ -1,6 +1,6 @@
 # 100626-harness-install-migrate
 **Type:** draft
-**Status:** implemented — chờ verify-before-commit promote
+**Status:** promoted
 
 ## Agent Task Assignment
 | Task | Agent | Status |
@@ -12,7 +12,7 @@
 | HTML hướng dẫn lệnh + 2 sequence diagram | Claude (main) | done |
 **Tags:** harness, install, migrate, orca-workflow
 **Proposed:** 2026-06-10
-**Sequence diagram (hoạt họa):** [html/100626-harness-install-guide.html](../../../html/100626-harness-install-guide.html) — kiêm file hướng dẫn lệnh cho 2 trường hợp
+**Sequence diagram (hoạt họa):** [html/100626-harness-install-guide.html](../../html/100626-harness-install-guide.html) — kiêm file hướng dẫn lệnh cho 2 trường hợp
 
 ## Plan
 - [ ] Task 1: Viết `harness/scripts/install-harness.sh` — idempotent, tự detect install mới vs migrate (`llmwiki/` đã tồn tại chưa), fallback clone template khi thiếu file nguồn, baseline-audit trước khi bật chặn
@@ -36,3 +36,5 @@
 
 ## Origin
 - Thảo luận + approve trong session 2026-06-10, tiếp nối [[100626-harness-enforcement-stack]]
+- **Commit:** a599d54 — harness: dựng lớp enforcement/audit/evals
+- **Date promoted:** 2026-06-11

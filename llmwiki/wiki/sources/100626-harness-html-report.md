@@ -1,6 +1,6 @@
 # 100626-harness-html-report
 **Type:** draft
-**Status:** proposed
+**Status:** promoted
 **Tags:** docs-site-macos, output-report
 **Proposed:** 2026-06-10
 
@@ -22,6 +22,6 @@ Báo cáo HTML single-file về toàn bộ nâng cấp harness 10/06/2026, hệ 
 - Cặp với proposal implement: [[100626-harness-enforcement-stack]]
 
 ## Origin
-- **Draft:** `wiki/sources/draft/100626-harness-html-report.md`
-- **Commit:** _(filled by verify-before-commit)_
-- **Date promoted:** _(filled by verify-before-commit)_
+- **Draft:** (promoted từ) `wiki/sources/draft/100626-harness-html-report.md`
+- **Commit:** a599d54 — harness: dựng lớp enforcement/audit/evals
+- **Date promoted:** 2026-06-11

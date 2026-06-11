@@ -1,10 +1,10 @@
 # 100626-harness-enforcement-stack
 **Type:** draft
-**Status:** implemented — chờ verify-before-commit promote
+**Status:** promoted
 **Tags:** harness, enforcement, observability, evals
 **Proposed:** 2026-06-10
 **Implemented:** 2026-06-10
-**Sequence diagram (hoạt họa):** [html/100626-harness-enforcement-stack-seq.html](../../../html/100626-harness-enforcement-stack-seq.html) — luồng code đi qua hooks/validators/pre-commit, xem khi duyệt gate
+**Sequence diagram (hoạt họa):** [html/100626-harness-enforcement-stack-seq.html](../../html/100626-harness-enforcement-stack-seq.html) — luồng code đi qua hooks/validators/pre-commit, xem khi duyệt gate
 
 ## Agent Task Assignment
 | Task | Agent | Status |
@@ -92,3 +92,5 @@ L4 EVALS       wiki-health script (vendor-neutral) + promptfoo (đổi provider 
 ## Origin
 
 - Crawl trực tiếp GitHub/web ngày 2026-06-10 từ session chính (3 subagent trước đó bị chặn web, kết quả training-data chỉ dùng làm khung)
+- **Commit:** a599d54 — harness: dựng lớp enforcement/audit/evals
+- **Date promoted:** 2026-06-11

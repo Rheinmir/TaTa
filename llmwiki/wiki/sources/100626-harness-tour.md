@@ -1,6 +1,6 @@
 # 100626-harness-tour
 **Type:** draft
-**Status:** implemented — chờ verify-before-commit promote
+**Status:** promoted
 
 ## Agent Task Assignment
 | Task | Agent | Status |
@@ -12,7 +12,7 @@
 | Sync rheinmir/setup@orca (e5b85a6) | Claude (main) | done |
 **Tags:** harness, tour, onboarding, dx
 **Proposed:** 2026-06-10
-**Sequence diagram (hoạt họa):** [html/100626-harness-tour-seq.html](../../../html/100626-harness-tour-seq.html)
+**Sequence diagram (hoạt họa):** [html/100626-harness-tour-seq.html](../../html/100626-harness-tour-seq.html)
 
 ## Plan — 3 tầng trải nghiệm "hệ thống này làm gì"
 - [ ] Task 1 — Tầng 1: auto-smoke trong `install-harness.sh` — cuối install chạy 3 check máy (R1/R2/R5 phải BỊ CHẶN), in bảng ✓, mời chạy tour. <1s, không tạo file rác
@@ -37,3 +37,5 @@
 
 ## Origin
 - Đề xuất + duyệt trong session 2026-06-10, tiếp nối [[100626-harness-install-migrate]]
+- **Commit:** a599d54 — harness: dựng lớp enforcement/audit/evals
+- **Date promoted:** 2026-06-11
