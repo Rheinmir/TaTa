@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sequence — harness tour 3 tầng (propose 100626)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2f0f7;--text-2:#4a4a55;--legacy:#6366f1;--legacy-dark:#4338ca;--new:#059669;--new-dark:#047857;--warn:#d97706}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:#0f0f12;font-family:'Inter',-apple-system,sans-serif;line-height:1.6}
+.hero{padding:50px 24px 8px;text-align:center;max-width:840px;margin:0 auto}
+.hero h1{font-size:clamp(24px,4vw,36px);font-weight:800;background:linear-gradient(135deg,#6366f1,#a855f7,#ec4899);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin-top:8px;font-size:13.5px;color:var(--text-2)} .hero a{color:var(--legacy-dark)}
+main{max-width:1040px;margin:0 auto;padding:18px 24px 60px}
+.diagram-box{background:rgba(255,255,255,.7);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.6);
+  border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.06);padding:22px;margin:20px 0;cursor:pointer}
+.diagram-title{font-size:13.5px;font-weight:800;margin-bottom:6px}
+.caption{min-height:34px;display:flex;align-items:center;gap:9px;font-size:12.5px;font-weight:600;
+  background:rgba(0,0,0,.04);border-radius:10px;padding:6px 13px;margin-bottom:12px;color:var(--text-2)}
+.caption .stepno{flex-shrink:0;font-size:10.5px;font-weight:800;background:var(--legacy);color:#fff;border-radius:14px;padding:1px 9px}
+svg{width:100%;height:auto;display:block;user-select:none}
+.msg{opacity:0;transition:opacity .35s ease}.msg.on{opacity:1}.msg.cur text.lbl{font-weight:800}
+footer{text-align:center;font-size:12px;color:#9494a3;padding:22px} footer a{color:var(--legacy-dark)}
+</style>
+</head>
+<body>
+<div class="hero">
+  <h1>Tour 3 tầng — user mới "thấy" harness thế nào</h1>
+  <p>Propose: <a href="../wiki/draft/orca/100626-harness-tour.md">100626-harness-tour.md</a> · indigo = có sẵn · emerald = thêm mới · cam = hành vi bị chặn được trình diễn · click diagram để pause</p>
+</div>
+<main>
+<div class="diagram-box">
+  <div class="diagram-title">Hành trình user mới: install → tự kiểm → máy diễn → xem Claude bị cắn thật</div>
+  <div class="caption"><span class="stepno">▶</span><span class="captext">Tự chạy lặp…</span></div>
+  <svg viewBox="0 0 940 460" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="t-l" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#6366f1"/></marker>
+      <marker id="t-n" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#059669"/></marker>
+      <marker id="t-w" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#d97706"/></marker>
+    </defs>
+    <g><rect x="22" y="12" width="120" height="36" rx="8" fill="rgba(255,255,255,.85)" stroke="#6366f1" stroke-width="2"/><text x="82" y="34" text-anchor="middle" font-size="11" font-weight="700" fill="#4338ca">User mới</text><line x1="82" y1="48" x2="82" y2="438" stroke="#6366f1" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="192" y="12" width="150" height="36" rx="8" fill="rgba(16,185,129,.12)" stroke="#059669" stroke-width="2"/><text x="267" y="29" text-anchor="middle" font-size="10.5" font-weight="700" fill="#047857">install-harness.sh</text><text x="267" y="42" text-anchor="middle" font-size="8.5" fill="#4a4a55">+ auto-smoke ✚</text><line x1="267" y1="48" x2="267" y2="438" stroke="#059669" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="402" y="12" width="130" height="36" rx="8" fill="rgba(16,185,129,.12)" stroke="#059669" stroke-width="2"/><text x="467" y="29" text-anchor="middle" font-size="10.5" font-weight="700" fill="#047857">tour.sh ✚</text><text x="467" y="42" text-anchor="middle" font-size="8.5" fill="#4a4a55">sandbox /tmp, tự dọn</text><line x1="467" y1="48" x2="467" y2="438" stroke="#059669" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="592" y="12" width="140" height="36" rx="8" fill="rgba(16,185,129,.12)" stroke="#059669" stroke-width="2"/><text x="662" y="29" text-anchor="middle" font-size="10.5" font-weight="700" fill="#047857">/harness-tour ✚</text><text x="662" y="42" text-anchor="middle" font-size="8.5" fill="#4a4a55">skill — Claude tự diễn</text><line x1="662" y1="48" x2="662" y2="438" stroke="#059669" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="782" y="12" width="136" height="36" rx="8" fill="rgba(255,255,255,.85)" stroke="#6366f1" stroke-width="2"/><text x="850" y="29" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">validators / hooks</text><text x="850" y="42" text-anchor="middle" font-size="8.5" fill="#4a4a55">hàng rào thật</text><line x1="850" y1="48" x2="850" y2="438" stroke="#6366f1" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g class="msg" data-cap="1 · User kéo template về, chạy installer (hoặc /new-project-setup gọi hộ)"><line x1="82" y1="88" x2="259" y2="88" stroke="#6366f1" stroke-width="2" marker-end="url(#t-l)"/><text class="lbl" x="170" y="80" text-anchor="middle" font-size="10" font-weight="600" fill="#4338ca">bash install-harness.sh .</text></g>
+    <g class="msg" data-cap="2 · TẦNG 1 — cuối install, auto-smoke bắn 3 phát thử vào validators: R1, R2, R5 đều phải BỊ CHẶN"><line x1="267" y1="126" x2="842" y2="126" stroke="#059669" stroke-width="2" marker-end="url(#t-n)"/><text class="lbl" x="554" y="118" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">auto-smoke: thử vi phạm R1 · R2 · R5</text></g>
+    <g class="msg" data-cap="3 · Bảng 'Harness tự kiểm' in ra: 3 dòng BỊ CHẶN ✓ — user thấy hàng rào cắn TRƯỚC khi dùng, 0 effort"><line x1="267" y1="164" x2="90" y2="164" stroke="#d97706" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#t-w)"/><text class="lbl" x="178" y="156" text-anchor="middle" font-size="10" font-weight="600" fill="#b45309">⛔×3 BỊ CHẶN ✓ + lời mời tour</text></g>
+    <g class="msg" data-cap="4 · TẦNG 2 (tùy chọn, 1 lệnh) — user chạy tour.sh: máy dựng sandbox, diễn đủ 5 cảnh vi phạm"><line x1="82" y1="202" x2="459" y2="202" stroke="#6366f1" stroke-width="2" marker-end="url(#t-l)"/><text class="lbl" x="270" y="194" text-anchor="middle" font-size="10" font-weight="600" fill="#4338ca">bash harness/scripts/tour.sh</text></g>
+    <g class="msg" data-cap="5 · 5 cảnh: ghi raw (Write + bash), thiếu Origin, sai folder, index nói dối, audit JSONL tự sinh — mỗi cảnh in nguyên văn lý do validator chặn"><line x1="467" y1="240" x2="842" y2="240" stroke="#059669" stroke-width="2" marker-end="url(#t-n)"/><text class="lbl" x="654" y="232" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">diễn 5 cảnh trong sandbox → tự dọn</text></g>
+    <g class="msg" data-cap="6 · TẦNG 3 (trực quan nhất) — trong phiên Claude Code thật, user gọi /harness-tour"><line x1="82" y1="278" x2="654" y2="278" stroke="#6366f1" stroke-width="2" marker-end="url(#t-l)"/><text class="lbl" x="368" y="270" text-anchor="middle" font-size="10" font-weight="600" fill="#4338ca">gọi /harness-tour trong phiên</text></g>
+    <g class="msg" data-cap="7 · Claude CỐ TÌNH vi phạm 3 rule trên project thật: ghi raw/ → deny; thiếu Origin → PostToolUse ép sửa; dừng khi index lệch → Stop hook giữ"><line x1="662" y1="316" x2="842" y2="316" stroke="#059669" stroke-width="2" marker-end="url(#t-n)"/><text class="lbl" x="752" y="308" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">cố tình vi phạm ×3</text></g>
+    <g class="msg" data-cap="8 · Hooks cắn Claude sống — Claude tường thuật nguyên văn từng phát chặn cho user xem"><line x1="850" y1="354" x2="670" y2="354" stroke="#d97706" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#t-w)"/><text class="lbl" x="760" y="346" text-anchor="middle" font-size="10" font-weight="600" fill="#b45309">⛔ bị chặn sống ×3 + tường thuật</text></g>
+    <g class="msg" data-cap="9 · Tour tự dọn demo (xóa tour-demo.md + row index cùng lượt), kết màn bằng bằng chứng audit JSONL — user hiểu 100% hệ thống làm gì"><line x1="662" y1="392" x2="90" y2="392" stroke="#059669" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#t-n)"/><text class="lbl" x="376" y="384" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">dọn sạch + bằng chứng audit → user tin hệ thống</text></g>
+  </svg>
+</div>
+</main>
+<footer>Cặp md: <a href="../wiki/draft/orca/100626-harness-tour.md">100626-harness-tour.md</a> · hướng dẫn install: <a href="100626-harness-install-guide.html">100626-harness-install-guide.html</a></footer>
+<script>
+document.querySelectorAll('.diagram-box').forEach(box=>{
+  const svg=box.querySelector('svg');if(!svg)return;
+  const msgs=[...svg.querySelectorAll('g.msg')];
+  const captext=box.querySelector('.captext'),stepno=box.querySelector('.stepno');
+  let i=0,paused=false,timer=null;const STEP=1700,HOLD=3400;
+  function tick(){if(paused)return;
+    if(i<msgs.length){msgs.forEach(m=>m.classList.remove('cur'));
+      msgs[i].classList.add('on','cur');captext.textContent=msgs[i].dataset.cap;
+      stepno.textContent=(i+1)+'/'+msgs.length;i++;timer=setTimeout(tick,STEP);}
+    else{timer=setTimeout(()=>{if(paused)return;msgs.forEach(m=>m.classList.remove('on','cur'));i=0;tick();},HOLD);}}
+  box.addEventListener('click',()=>{paused=!paused;if(paused)clearTimeout(timer);else tick();});
+  setTimeout(tick,400);
+});
+</script>
+</body>
+</html>

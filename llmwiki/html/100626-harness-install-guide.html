@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cài harness — project mới & migrate (10/06/2026)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2f0f7;--text-1:#0f0f12;--text-2:#4a4a55;
+  --legacy:#6366f1;--legacy-dark:#4338ca;--new:#059669;--new-dark:#047857;--warn:#d97706}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text-1);font-family:'Inter',-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;line-height:1.6}
+.hero{padding:56px 24px 10px;text-align:center;max-width:880px;margin:0 auto}
+.hero h1{font-size:clamp(26px,4vw,42px);font-weight:800;
+  background:linear-gradient(135deg,#6366f1,#a855f7,#ec4899);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin-top:10px;font-size:14px;color:var(--text-2)}
+.hero a{color:var(--legacy-dark)}
+.legend{display:flex;gap:12px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+.legend span{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;
+  background:rgba(255,255,255,.7);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.6);
+  border-radius:20px;padding:5px 13px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.dot.l{background:var(--legacy)}.dot.n{background:var(--new)}.dot.w{background:var(--warn)}
+main{max-width:1060px;margin:0 auto;padding:20px 24px 70px}
+h2{font-size:24px;font-weight:800;margin:44px 0 6px}
+h2.cn{color:var(--new-dark)} h2.cw{color:#b45309}
+.sub{font-size:13.5px;color:var(--text-2);max-width:780px}
+.card{background:rgba(255,255,255,.7);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.6);
+  border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.06);padding:20px;margin:18px 0}
+.card h4{font-size:14px;font-weight:700;margin-bottom:8px;color:var(--new-dark)}
+.card.w h4{color:#b45309}
+.card ul{list-style:none}
+.card li{font-size:13px;color:var(--text-2);padding-left:16px;position:relative;margin-bottom:6px}
+.card li::before{content:'›';position:absolute;left:0;font-weight:700;color:var(--new)}
+.card.w li::before{color:var(--warn)}
+code{font-size:12px;background:rgba(0,0,0,.05);border-radius:5px;padding:1px 5px}
+.table-wrap{overflow-x:auto;margin:18px 0}
+table{width:100%;border-collapse:collapse;background:rgba(255,255,255,.7);backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.6);border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.06);font-size:13px}
+th{background:rgba(0,0,0,.04);text-align:left;padding:10px 14px;font-size:12px}
+td{padding:9px 14px;border-top:1px solid rgba(0,0,0,.05);color:var(--text-2);vertical-align:top}
+pre.code-block{background:#16161d;color:#d6d6e2;font-size:12.5px;line-height:1.7;border-radius:14px;
+  padding:18px;overflow-x:auto;margin:14px 0;font-family:'SF Mono',Menlo,Consolas,monospace}
+pre.code-block .c{color:#8b8b9e}
+.code-wrap{position:relative}
+.code-copy{position:absolute;top:8px;right:8px;z-index:2;font-size:11px;font-family:inherit;font-weight:500;
+  background:rgba(255,255,255,.1);color:#cbd5e1;border:1px solid rgba(255,255,255,.15);
+  border-radius:6px;padding:3px 10px;cursor:pointer;opacity:0;transition:opacity .15s,background .15s,color .15s}
+.code-wrap:hover .code-copy{opacity:1}
+.code-copy:hover{background:rgba(255,255,255,.2);color:#fff}
+.code-copy.copied{background:rgba(16,185,129,.25);color:#6ee7b7;border-color:rgba(16,185,129,.45);opacity:1}
+.diagram-box{background:rgba(255,255,255,.7);backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.6);border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.06);
+  padding:22px;margin:20px 0;cursor:pointer;transition:box-shadow .2s}
+.diagram-box:hover{box-shadow:0 6px 28px rgba(0,0,0,.1)}
+.diagram-title{font-size:13.5px;font-weight:800;margin-bottom:2px}
+.diagram-sub{font-size:12px;color:var(--text-2);margin-bottom:10px}
+.caption{min-height:34px;display:flex;align-items:center;gap:9px;font-size:12.5px;font-weight:600;
+  background:rgba(0,0,0,.04);border-radius:10px;padding:6px 13px;margin-bottom:12px;color:var(--text-2)}
+.caption .stepno{flex-shrink:0;font-size:10.5px;font-weight:800;background:var(--legacy);color:#fff;border-radius:14px;padding:1px 9px}
+.caption.paused .stepno{background:#9494a3}
+svg{width:100%;height:auto;display:block;user-select:none}
+.msg{opacity:0;transition:opacity .35s ease}
+.msg.on{opacity:1}
+.msg.cur text.lbl{font-weight:800}
+footer{text-align:center;font-size:12px;color:#9494a3;padding:24px}
+footer a{color:var(--legacy-dark)}
+.flag{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.4px;border-radius:14px;padding:2px 9px;vertical-align:2px}
+.flag.ok{background:rgba(16,185,129,.14);color:#047857}.flag.dbt{background:rgba(245,158,11,.16);color:#b45309}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Cài harness vào project — 2 trường hợp</h1>
+  <p>Một lệnh duy nhất: <code>bash harness/scripts/install-harness.sh .</code> — script tự nhận biết project <b>MỚI</b> hay <b>MIGRATE</b> (đã có llmwiki cũ). Nguồn: <a href="https://github.com/rheinmir/setup/tree/orca">rheinmir/setup@orca</a> (commit <code>9030992</code>).</p>
+  <div class="legend">
+    <span><i class="dot l"></i> thành phần có sẵn</span>
+    <span><i class="dot n"></i> harness cài vào</span>
+    <span><i class="dot w"></i> nợ wiki cũ / cần xử lý tay</span>
+  </div>
+</div>
+
+<main>
+
+<div class="table-wrap">
+  <table>
+    <tr><th></th><th>Trường hợp A — Project MỚI</th><th>Trường hợp B — MIGRATE (đã onboard)</th></tr>
+    <tr><td><b>Nhận biết</b></td><td>Chưa có <code>llmwiki/</code></td><td>Đã có <code>llmwiki/</code> + wiki cũ</td></tr>
+    <tr><td><b>Script làm gì thêm</b></td><td>Dựng khung wiki, index, log</td><td>MERGE <code>settings.json</code> (backup, giữ hook user), KHÔNG đụng wiki</td></tr>
+    <tr><td><b>Kết quả mong đợi</b></td><td><span class="flag ok">rc=0</span> sạch ngay, chặn full</td><td><span class="flag dbt">rc=3</span> nếu có nợ → backfill → chạy lại tới <span class="flag ok">rc=0</span></td></tr>
+    <tr><td><b>Lưu ý</b></td><td>Tiếp tục <code>onboard-codebase</code> để populate wiki</td><td>Đừng tin Stop hook khi còn nợ — nó sẽ nhắc đúng phần nợ</td></tr>
+  </table>
+</div>
+
+<!-- ============ CASE A ============ -->
+<h2 class="cn">Trường hợp A — Project mới hoàn toàn</h2>
+<p class="sub">Nằm trong <code>/new-project-setup</code> (bước 3 của skill đã được cập nhật). Chạy tay thì đúng 4 khối lệnh này:</p>
+
+<pre class="code-block"><span class="c"># 0. (nếu chưa pull template) — sync-template tự lo, hoặc tay:</span>
+git clone -b orca git@github.com:rheinmir/setup.git /tmp/tpl
+cp -R /tmp/tpl/harness /tmp/tpl/llmwiki ./ && rm -rf /tmp/tpl
+
+<span class="c"># 1. Cài harness — script tự detect mode NEW, dựng khung wiki + copy toàn bộ:</span>
+bash harness/scripts/install-harness.sh .
+
+<span class="c"># 2. Kích hoạt L2 git gate (một lần mỗi máy):</span>
+pipx install pre-commit && pre-commit install
+
+<span class="c"># 3. Smoke check — lệnh này PHẢI bị chặn (exit 2):</span>
+echo '{"action":"write","file_path":"llmwiki/raw/x.md"}' | python3 harness/validators/no_write_raw.py
+
+<span class="c"># 4. Populate wiki từ codebase:</span>
+<span class="c"># INVOKE: onboard-codebase (hoặc orca-onboard cho nhiều repo song song)</span></pre>
+
+<div class="diagram-box">
+  <div class="diagram-title">Luồng A — install mới <span style="font-weight:400;color:#9494a3">(click để pause)</span></div>
+  <div class="caption"><span class="stepno">▶</span><span class="captext">Tự chạy lặp…</span></div>
+  <svg viewBox="0 0 940 420" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="ga-l" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#6366f1"/></marker>
+      <marker id="ga-n" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#059669"/></marker>
+    </defs>
+    <g><rect x="22" y="12" width="120" height="36" rx="8" fill="rgba(255,255,255,.85)" stroke="#6366f1" stroke-width="2"/><text x="82" y="34" text-anchor="middle" font-size="11" font-weight="700" fill="#4338ca">Dev / agent</text><line x1="82" y1="48" x2="82" y2="398" stroke="#6366f1" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="182" y="12" width="140" height="36" rx="8" fill="rgba(255,255,255,.85)" stroke="#6366f1" stroke-width="2"/><text x="252" y="29" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">new-project-setup</text><text x="252" y="42" text-anchor="middle" font-size="8.5" fill="#4a4a55">skill (bước 3 mới)</text><line x1="252" y1="48" x2="252" y2="398" stroke="#6366f1" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="362" y="12" width="140" height="36" rx="8" fill="rgba(255,255,255,.85)" stroke="#6366f1" stroke-width="2"/><text x="432" y="29" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">rheinmir/setup@orca</text><text x="432" y="42" text-anchor="middle" font-size="8.5" fill="#4a4a55">template repo</text><line x1="432" y1="48" x2="432" y2="398" stroke="#6366f1" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="542" y="12" width="150" height="36" rx="8" fill="rgba(16,185,129,.12)" stroke="#059669" stroke-width="2"/><text x="617" y="29" text-anchor="middle" font-size="10.5" font-weight="700" fill="#047857">install-harness.sh ✚</text><text x="617" y="42" text-anchor="middle" font-size="8.5" fill="#4a4a55">mode: NEW</text><line x1="617" y1="48" x2="617" y2="398" stroke="#059669" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="732" y="12" width="186" height="36" rx="8" fill="rgba(255,255,255,.85)" stroke="#6366f1" stroke-width="2"/><text x="825" y="29" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">project files</text><text x="825" y="42" text-anchor="middle" font-size="8.5" fill="#4a4a55">llmwiki/ · harness/ · .claude/</text><line x1="825" y1="48" x2="825" y2="398" stroke="#6366f1" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g class="msg" data-cap="1 · Gọi /new-project-setup (hoặc chạy tay 4 khối lệnh)"><line x1="82" y1="88" x2="244" y2="88" stroke="#6366f1" stroke-width="2" marker-end="url(#ga-l)"/><text class="lbl" x="163" y="80" text-anchor="middle" font-size="10" font-weight="600" fill="#4338ca">/new-project-setup</text></g>
+    <g class="msg" data-cap="2 · Skill pull template từ rheinmir/setup@orca (sync-template)"><line x1="252" y1="126" x2="424" y2="126" stroke="#6366f1" stroke-width="2" marker-end="url(#ga-l)"/><text class="lbl" x="338" y="118" text-anchor="middle" font-size="10" font-weight="600" fill="#4338ca">pull template</text></g>
+    <g class="msg" data-cap="3 · harness/ + llmwiki/ (kèm .claude/hooks) về repo project"><line x1="432" y1="164" x2="817" y2="164" stroke="#6366f1" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#ga-l)"/><text class="lbl" x="624" y="156" text-anchor="middle" font-size="10" font-weight="600" fill="#4338ca">harness/ + llmwiki/ + .claude/</text></g>
+    <g class="msg" data-cap="4 · Chạy installer: bash harness/scripts/install-harness.sh ."><line x1="252" y1="202" x2="609" y2="202" stroke="#059669" stroke-width="2" marker-end="url(#ga-n)"/><text class="lbl" x="430" y="194" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">bash install-harness.sh .</text></g>
+    <g class="msg" data-cap="5 · Không thấy llmwiki/ → mode NEW: dựng khung wiki (index, log, concepts/entities/sources/draft, raw/)"><line x1="617" y1="240" x2="817" y2="240" stroke="#059669" stroke-width="2" marker-end="url(#ga-n)"/><text class="lbl" x="717" y="232" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">dựng khung wiki (mode NEW)</text></g>
+    <g class="msg" data-cap="6 · Copy validators (2 nơi: harness/ + .claude/hooks/validators/), hooks L1, settings.json, pre-commit config"><line x1="617" y1="278" x2="817" y2="278" stroke="#059669" stroke-width="2" marker-end="url(#ga-n)"/><text class="lbl" x="717" y="270" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">validators + hooks + settings + L2</text></g>
+    <g class="msg" data-cap="7 · Baseline audit chạy — wiki mới tinh nên sạch → rc=0 HOÀN TẤT"><line x1="617" y1="316" x2="90" y2="316" stroke="#059669" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#ga-n)"/><text class="lbl" x="353" y="308" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">rc=0 — enforcement bật đủ</text></g>
+    <g class="msg" data-cap="8 · Dev kích hoạt L2 + smoke check, rồi onboard-codebase populate wiki"><line x1="82" y1="354" x2="244" y2="354" stroke="#6366f1" stroke-width="2" marker-end="url(#ga-l)"/><text class="lbl" x="163" y="346" text-anchor="middle" font-size="10" font-weight="600" fill="#4338ca">pre-commit install → onboard</text></g>
+  </svg>
+</div>
+
+<!-- ============ CASE B ============ -->
+<h2 class="cw">Trường hợp B — Migrate project đã onboard</h2>
+<p class="sub">Wiki cũ thường có "nợ" (file thiếu <code>## Origin</code>, index lệch). Script <b>không bật chặn mù</b>: nó audit trước, exit 3 kèm danh sách nợ, bạn trả nợ rồi chạy lại.</p>
+<p class="sub" style="margin-top:8px">⚡ <b>Cách lười (khuyến nghị)</b>: trong phiên Claude Code, gọi <code>/harness-update</code> — Claude tự chạy installer, <b>tự backfill nợ</b> (thêm <code>## Origin</code> từ git log, sửa index), lặp tới khi sạch rồi báo cáo. Các lệnh dưới là bản chạy tay tương đương:</p>
+
+<pre class="code-block"><span class="c"># 1. Chạy installer ngay tại root project (script tự clone template nếu repo chưa có harness/):</span>
+bash harness/scripts/install-harness.sh .
+<span class="c">#   → mode: MIGRATE — settings.json được MERGE (backup .bak.*, giữ nguyên hook bạn tự thêm)</span>
+<span class="c">#   → rc=3 nếu CÓ NỢ, kèm danh sách in thẳng ra terminal + harness/metrics/baseline-YYYY-MM-DD.json</span>
+
+<span class="c"># 2. Trả nợ theo danh sách (ví dụ):</span>
+<span class="c">#   [R2] concepts/old-thing.md thiếu '## Origin'  → mở file, thêm section Origin (backfill "legacy")</span>
+<span class="c">#   [R3] THIẾU trong index: concepts/old-thing.md → thêm row vào wiki/index.md</span>
+
+<span class="c"># 3. Chạy lại để xác nhận sạch — lặp tới khi rc=0:</span>
+bash harness/scripts/install-harness.sh .
+
+<span class="c"># 4. Kích hoạt L2 + smoke:</span>
+pipx install pre-commit && pre-commit install
+echo '{"action":"write","file_path":"llmwiki/raw/x.md"}' | python3 harness/validators/no_write_raw.py  <span class="c"># phải exit 2</span></pre>
+
+<div class="diagram-box">
+  <div class="diagram-title">Luồng B — migrate với vòng trả nợ <span style="font-weight:400;color:#9494a3">(click để pause)</span></div>
+  <div class="caption"><span class="stepno">▶</span><span class="captext">Tự chạy lặp…</span></div>
+  <svg viewBox="0 0 940 460" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="gb-l" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#6366f1"/></marker>
+      <marker id="gb-n" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#059669"/></marker>
+      <marker id="gb-w" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#d97706"/></marker>
+    </defs>
+    <g><rect x="22" y="12" width="120" height="36" rx="8" fill="rgba(255,255,255,.85)" stroke="#6366f1" stroke-width="2"/><text x="82" y="34" text-anchor="middle" font-size="11" font-weight="700" fill="#4338ca">Dev / agent</text><line x1="82" y1="48" x2="82" y2="438" stroke="#6366f1" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="192" y="12" width="150" height="36" rx="8" fill="rgba(16,185,129,.12)" stroke="#059669" stroke-width="2"/><text x="267" y="29" text-anchor="middle" font-size="10.5" font-weight="700" fill="#047857">install-harness.sh ✚</text><text x="267" y="42" text-anchor="middle" font-size="8.5" fill="#4a4a55">mode: MIGRATE</text><line x1="267" y1="48" x2="267" y2="438" stroke="#059669" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="392" y="12" width="150" height="36" rx="8" fill="rgba(255,255,255,.85)" stroke="#6366f1" stroke-width="2"/><text x="467" y="29" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">.claude/settings.json</text><text x="467" y="42" text-anchor="middle" font-size="8.5" fill="#4a4a55">config user có sẵn</text><line x1="467" y1="48" x2="467" y2="438" stroke="#6366f1" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="592" y="12" width="140" height="36" rx="8" fill="rgba(16,185,129,.12)" stroke="#059669" stroke-width="2"/><text x="662" y="29" text-anchor="middle" font-size="10.5" font-weight="700" fill="#047857">validators ✚</text><text x="662" y="42" text-anchor="middle" font-size="8.5" fill="#4a4a55">baseline audit</text><line x1="662" y1="48" x2="662" y2="438" stroke="#059669" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="782" y="12" width="136" height="36" rx="8" fill="rgba(245,158,11,.14)" stroke="#d97706" stroke-width="2"/><text x="850" y="29" text-anchor="middle" font-size="10.5" font-weight="700" fill="#b45309">wiki cũ (có nợ)</text><text x="850" y="42" text-anchor="middle" font-size="8.5" fill="#4a4a55">thiếu Origin, index lệch</text><line x1="850" y1="48" x2="850" y2="438" stroke="#d97706" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g class="msg" data-cap="1 · Chạy installer tại root — thấy llmwiki/ đã tồn tại → mode MIGRATE, KHÔNG đụng nội dung wiki"><line x1="82" y1="88" x2="259" y2="88" stroke="#059669" stroke-width="2" marker-end="url(#gb-n)"/><text class="lbl" x="170" y="80" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">bash install-harness.sh .</text></g>
+    <g class="msg" data-cap="2 · MERGE settings.json: backup .bak.*, union deny rules, APPEND hook harness vào event đã có hook user — không ghi đè"><line x1="267" y1="126" x2="459" y2="126" stroke="#059669" stroke-width="2" marker-end="url(#gb-n)"/><text class="lbl" x="363" y="118" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">merge (backup, giữ hook user)</text></g>
+    <g class="msg" data-cap="3 · Copy validators + hooks + pre-commit config (file user có sẵn thì không đè, chỉ cảnh báo)"><line x1="267" y1="164" x2="654" y2="164" stroke="#059669" stroke-width="2" marker-end="url(#gb-n)"/><text class="lbl" x="460" y="156" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">cài validators + hooks + L2</text></g>
+    <g class="msg" data-cap="4 · Baseline audit: R2 origin (file-mode) + R3 index_sync + wiki-health quét toàn bộ wiki cũ"><line x1="662" y1="202" x2="842" y2="202" stroke="#059669" stroke-width="2" marker-end="url(#gb-n)"/><text class="lbl" x="752" y="194" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">audit R2 + R3 + health</text></g>
+    <g class="msg" data-cap="5 · Phát hiện nợ: file thiếu ## Origin, index lệch — liệt kê từng món"><line x1="850" y1="240" x2="275" y2="240" stroke="#d97706" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#gb-w)"/><text class="lbl" x="562" y="232" text-anchor="middle" font-size="10" font-weight="600" fill="#b45309">NỢ: thiếu Origin · index lệch</text></g>
+    <g class="msg" data-cap="6 · rc=3 + báo cáo harness/metrics/baseline-*.json — hooks ĐÃ cài nhưng đừng tin Stop hook khi còn nợ"><line x1="267" y1="278" x2="90" y2="278" stroke="#d97706" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#gb-w)"/><text class="lbl" x="178" y="270" text-anchor="middle" font-size="10" font-weight="600" fill="#b45309">rc=3 + baseline report</text></g>
+    <g class="msg" data-cap="7 · Dev/agent trả nợ: backfill '## Origin' (ghi 'legacy backfill'), thêm row index.md"><line x1="82" y1="316" x2="842" y2="316" stroke="#6366f1" stroke-width="2" marker-end="url(#gb-l)"/><text class="lbl" x="462" y="308" text-anchor="middle" font-size="10" font-weight="600" fill="#4338ca">backfill Origin + sửa index.md</text></g>
+    <g class="msg" data-cap="8 · Chạy lại installer (idempotent) → audit sạch → rc=0"><line x1="82" y1="354" x2="259" y2="354" stroke="#059669" stroke-width="2" marker-end="url(#gb-n)"/><text class="lbl" x="170" y="346" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">chạy lại → rc=0 sạch</text></g>
+    <g class="msg" data-cap="9 · Append entry migrate vào wiki/log.md — từ giờ enforcement đầy đủ như project mới"><line x1="267" y1="392" x2="842" y2="392" stroke="#059669" stroke-width="2" marker-end="url(#gb-n)"/><text class="lbl" x="554" y="384" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">log.md += migrate entry → DONE</text></g>
+  </svg>
+</div>
+
+<!-- ============ SAU KHI CÀI ============ -->
+<h2 class="cn">Sau khi cài — cả 2 trường hợp như nhau</h2>
+<div class="card">
+  <h4>Những gì tự chạy ngầm từ giờ (0 token, 0 lệnh phải nhớ)</h4>
+  <ul>
+    <li>Mỗi tool call: PreToolUse chặn ghi <code>raw/</code> + sai folder · PostToolUse bắt thiếu <code>## Origin</code> · audit JSONL tự ghi</li>
+    <li>Kết thúc lượt: Stop hook chặn nếu index lệch · SessionEnd tự append <code>log.md</code></li>
+    <li>Mỗi commit: pre-commit chạy lại validators + wiki-health — agent vendor nào cũng bị gate</li>
+  </ul>
+</div>
+<div class="card">
+  <h4>🎬 Tour — xem hệ thống làm gì trước khi tin nó</h4>
+  <ul>
+    <li><b>Tầng 1 (tự động)</b>: cuối <code>install-harness.sh</code> có bảng "Harness tự kiểm" — 3 rule phải hiện BỊ CHẶN ✓</li>
+    <li><b>Tầng 2 (1 lệnh)</b>: <code>bash harness/scripts/tour.sh</code> — máy diễn đủ 5 cảnh trong sandbox /tmp, tự dọn: chặn ghi raw/ (cả đường bash), ép Origin, bắt sai folder, bắt index nói dối, audit JSONL tự ghi</li>
+    <li><b>Tầng 3 (trực quan nhất)</b>: gọi <code>/harness-tour</code> trong phiên Claude Code — Claude cố tình vi phạm 3 rule trên project thật, bị chặn sống, tường thuật từng phát cắn, rồi tự dọn demo</li>
+  </ul>
+</div>
+<div class="card w">
+  <h4>Tùy chọn định kỳ (cron / weekly)</h4>
+  <ul>
+    <li><code>python3 harness/scripts/wiki-health.py --wiki-dir llmwiki/wiki --csv harness/metrics/wiki-health.csv</code> — trend CSV</li>
+    <li><code>npx promptfoo@latest eval -c harness/evals/promptfooconfig.yaml</code> — golden questions (~$1-5/lượt, khoản LLM duy nhất)</li>
+    <li><code>npx ccusage@latest daily</code> — cost mọi phiên, mọi CLI</li>
+  </ul>
+</div>
+
+</main>
+<footer>Cặp với propose: <a href="../wiki/draft/orca/100626-harness-install-migrate.md">100626-harness-install-migrate.md</a> · recipe kiến trúc: <a href="../../harness/recipe.md">harness/recipe.md</a> · báo cáo tổng: <a href="100626-harness-report.html">100626-harness-report.html</a></footer>
+
+<script>
+document.querySelectorAll('.diagram-box').forEach(box=>{
+  const svg=box.querySelector('svg');if(!svg)return;
+  const msgs=[...svg.querySelectorAll('g.msg')];
+  const captext=box.querySelector('.captext');
+  const stepno=box.querySelector('.stepno');
+  const capbar=box.querySelector('.caption');
+  let i=0,paused=false,timer=null;
+  const STEP=1600,HOLD=3400;
+  function tick(){
+    if(paused)return;
+    if(i<msgs.length){
+      msgs.forEach(m=>m.classList.remove('cur'));
+      msgs[i].classList.add('on','cur');
+      captext.textContent=msgs[i].dataset.cap;
+      stepno.textContent=(i+1)+'/'+msgs.length;
+      i++;timer=setTimeout(tick,STEP);
+    }else{
+      timer=setTimeout(()=>{if(paused)return;
+        msgs.forEach(m=>m.classList.remove('on','cur'));i=0;tick();},HOLD);
+    }
+  }
+  box.addEventListener('click',()=>{
+    paused=!paused;capbar.classList.toggle('paused',paused);
+    if(paused){clearTimeout(timer)}else{tick()}
+  });
+  setTimeout(tick,400);
+});
+document.querySelectorAll('pre.code-block').forEach(pre=>{
+  if(pre.dataset.copy)return;pre.dataset.copy='1';
+  const code=pre.textContent;
+  const wrap=document.createElement('div');wrap.className='code-wrap';
+  pre.parentNode.insertBefore(wrap,pre);wrap.appendChild(pre);
+  const btn=document.createElement('button');btn.className='code-copy';btn.textContent='Copy';
+  wrap.appendChild(btn);
+  btn.addEventListener('click',async()=>{
+    try{await navigator.clipboard.writeText(code)}
+    catch{const ta=document.createElement('textarea');ta.value=code;
+      document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove()}
+    btn.textContent='✓ Copied';btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied')},1500)});
+});
+</script>
+</body>
+</html>

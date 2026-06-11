@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>llmwiki Harness — Báo cáo nâng cấp 10/06/2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f2f0f7; --text-1:#0f0f12; --text-2:#4a4a55;
+  --legacy:#6366f1; --legacy-dark:#4338ca; --legacy-bg:rgba(99,102,241,.12);
+  --new:#059669; --new-dark:#047857; --new-bg:rgba(16,185,129,.12);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text-1);font-family:'Inter',-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;line-height:1.6}
+a{color:inherit}
+
+/* ===== NAV ===== */
+nav{position:fixed;top:0;left:0;right:0;height:48px;z-index:100;display:flex;align-items:center;gap:4px;
+  padding:0 20px;background:rgba(242,240,247,.82);backdrop-filter:blur(24px) saturate(1.4);
+  border-bottom:1px solid rgba(0,0,0,.06)}
+nav .logo{font-weight:800;font-size:14px;margin-right:14px;
+  background:linear-gradient(135deg,#6366f1,#a855f7);-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
+nav a.nl{font-size:12px;font-weight:600;color:var(--text-2);text-decoration:none;padding:5px 10px;border-radius:8px;white-space:nowrap}
+nav a.nl.active{color:var(--legacy);background:rgba(99,102,241,.1)}
+nav .spacer{flex:1}
+.nav-scroll{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.nav-scroll::-webkit-scrollbar{display:none}
+
+/* ===== HERO ===== */
+.hero{padding:120px 24px 48px;text-align:center;max-width:900px;margin:0 auto}
+.hero h1{font-size:clamp(32px,5vw,56px);font-weight:800;line-height:1.15;
+  background:linear-gradient(135deg,#6366f1,#a855f7,#ec4899);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin-top:14px;font-size:16px;color:var(--text-2);max-width:640px;margin-left:auto;margin-right:auto}
+.legend{display:flex;gap:14px;justify-content:center;margin-top:22px;flex-wrap:wrap}
+.legend span{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;
+  background:rgba(255,255,255,.7);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.6);
+  border-radius:20px;padding:6px 14px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+.dot{width:11px;height:11px;border-radius:50%;display:inline-block}
+.dot.l{background:var(--legacy)} .dot.n{background:var(--new)}
+
+/* ===== CHIPS legacy/new ===== */
+.chip{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.4px;border-radius:20px;padding:2px 9px;vertical-align:middle;text-transform:uppercase}
+.chip.l{background:var(--legacy-bg);color:var(--legacy-dark)}
+.chip.n{background:var(--new-bg);color:var(--new-dark)}
+
+/* ===== SECTIONS ===== */
+section{position:relative;overflow:hidden;padding:64px 24px 72px;max-width:1100px;margin:0 auto}
+.section-bg::before{content:'';position:absolute;inset:0;pointer-events:none}
+.s-legacy::before{background:linear-gradient(180deg,rgba(99,102,241,.04) 0%,transparent 60%)}
+.s-new::before{background:linear-gradient(180deg,rgba(16,185,129,.04) 0%,transparent 60%)}
+.s-mix::before{background:linear-gradient(120deg,rgba(99,102,241,.05) 0%,rgba(16,185,129,.05) 100%)}
+.section-header{margin-bottom:24px}
+.section-header .tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.5px;border-radius:20px;padding:4px 12px;margin-bottom:10px}
+.sec-l .tag{background:var(--legacy-bg);color:var(--legacy)} .sec-l h2{color:var(--legacy-dark)}
+.sec-n .tag{background:var(--new-bg);color:var(--new)} .sec-n h2{color:var(--new-dark)}
+.sec-m .tag{background:linear-gradient(90deg,var(--legacy-bg),var(--new-bg));color:#7e22ce} .sec-m h2{color:#5b21b6}
+.section-header h2{font-size:28px;font-weight:800}
+.section-header p{color:var(--text-2);font-size:14px;max-width:760px;margin-top:6px}
+
+/* ===== CARDS ===== */
+.content-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}
+.card{background:rgba(255,255,255,.7);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.6);
+  border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.06);padding:20px}
+.card.l{border-left:3px solid var(--legacy)} .card.n{border-left:3px solid var(--new)}
+.card h4{font-size:14px;font-weight:700;margin-bottom:10px}
+.card.l h4{color:var(--legacy-dark)} .card.n h4{color:var(--new-dark)}
+.card ul{list-style:none}
+.card li{font-size:13px;color:var(--text-2);padding-left:16px;position:relative;margin-bottom:7px}
+.card li::before{content:'›';position:absolute;left:0;font-weight:700}
+.card.l li::before{color:var(--legacy)} .card.n li::before{color:var(--new)}
+.card code, td code, li code{font-size:12px;background:rgba(0,0,0,.05);border-radius:5px;padding:1px 5px}
+
+/* ===== TABLES ===== */
+.table-wrap{overflow-x:auto;margin-top:22px}
+table{width:100%;border-collapse:collapse;background:rgba(255,255,255,.7);backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.6);border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.06);font-size:13px}
+th{background:rgba(0,0,0,.04);text-align:left;padding:10px 14px;font-size:12px;letter-spacing:.3px}
+td{padding:9px 14px;border-top:1px solid rgba(0,0,0,.05);color:var(--text-2);vertical-align:top}
+tr.rl td:first-child{box-shadow:inset 3px 0 0 var(--legacy)}
+tr.rn td:first-child{box-shadow:inset 3px 0 0 var(--new)}
+
+/* ===== DIAGRAM (draggable) ===== */
+.diagram-box{background:rgba(255,255,255,.7);backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.6);border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.06);
+  padding:24px;margin:24px 0;position:relative;overflow:hidden;display:flex;flex-direction:column;
+  resize:vertical;min-height:160px;transition:box-shadow .2s ease}
+.diagram-box:hover{box-shadow:0 6px 28px rgba(0,0,0,.1)}
+.diagram-viewport{position:relative;flex:1 1 auto;width:100%;overflow:hidden;cursor:grab;touch-action:none}
+.diagram-viewport.grabbing{cursor:grabbing}
+.diagram-viewport svg{width:100%;height:auto;display:block;overflow:visible;transform-origin:0 0;
+  will-change:transform;user-select:none;-webkit-user-select:none}
+.dnode{cursor:move}
+.dnode>rect{transition:filter .15s ease}
+.dnode:hover>rect:first-of-type{filter:drop-shadow(0 3px 8px rgba(0,0,0,.18))}
+.diagram-hint{position:absolute;top:8px;right:12px;z-index:5;font-size:10px;color:#4a4a55;
+  background:rgba(255,255,255,.75);border:1px solid rgba(0,0,0,.05);border-radius:20px;
+  padding:3px 10px;white-space:nowrap;opacity:0;transition:opacity .2s;pointer-events:none}
+.diagram-box:hover .diagram-hint{opacity:.9}
+.diagram-reset{position:absolute;bottom:8px;right:10px;z-index:5;font-size:11px;
+  background:rgba(255,255,255,.85);border:1px solid rgba(0,0,0,.08);border-radius:8px;
+  padding:3px 9px;cursor:pointer;color:#4a4a55;opacity:0;transition:opacity .2s}
+.diagram-box:hover .diagram-reset{opacity:1}
+.diagram-reset:hover{background:#fff;color:#0f0f12}
+.diagram-box::after{content:'';position:absolute;right:3px;bottom:3px;width:10px;height:10px;
+  border-right:2px solid rgba(0,0,0,.18);border-bottom:2px solid rgba(0,0,0,.18);
+  border-bottom-right-radius:3px;pointer-events:none}
+.diagram-title{font-size:12px;font-weight:700;color:var(--text-2);margin-bottom:8px;letter-spacing:.3px}
+
+/* ===== CODE ===== */
+pre.code-block{background:#16161d;color:#d6d6e2;font-size:12.5px;line-height:1.65;border-radius:14px;
+  padding:18px;overflow-x:auto;margin:16px 0;font-family:'SF Mono',Menlo,Consolas,monospace}
+.code-wrap{position:relative}
+.code-copy{position:absolute;top:8px;right:8px;z-index:2;font-size:11px;font-family:inherit;font-weight:500;
+  background:rgba(255,255,255,.1);color:#cbd5e1;border:1px solid rgba(255,255,255,.15);
+  border-radius:6px;padding:3px 10px;cursor:pointer;opacity:0;transition:opacity .15s,background .15s,color .15s}
+.code-wrap:hover .code-copy{opacity:1}
+.code-copy:hover{background:rgba(255,255,255,.2);color:#fff}
+.code-copy.copied{background:rgba(16,185,129,.25);color:#6ee7b7;border-color:rgba(16,185,129,.45);opacity:1}
+
+/* ===== TREE ===== */
+.tree{font-family:'SF Mono',Menlo,Consolas,monospace;font-size:12.5px;line-height:1.9;white-space:pre;
+  background:rgba(255,255,255,.7);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.6);
+  border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.06);padding:20px 24px;margin-top:22px;overflow-x:auto}
+.tree .tl{color:var(--legacy-dark)} .tree .tn{color:var(--new-dark);font-weight:600}
+.tree .cm{color:#9494a3}
+
+/* ===== CHECKLIST ===== */
+.checklist{list-style:none;display:flex;flex-direction:column;gap:8px}
+.checklist li{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--text-2);cursor:pointer;padding-left:0}
+.checklist li::before{display:none}
+.checklist input[type="checkbox"]{width:16px;height:16px;border-radius:4px;border:1.5px solid #cbd5e1;
+  appearance:none;-webkit-appearance:none;cursor:pointer;flex-shrink:0;background:rgba(255,255,255,.8);margin-top:2px;transition:all .15s}
+.checklist input[type="checkbox"]:checked{background:#059669;border-color:#059669;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13 4L6.5 11 3 7.5' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");background-size:contain}
+.checklist label{cursor:pointer;line-height:1.5}
+.checklist input[type="checkbox"]:checked+label{text-decoration:line-through;color:#94a3b8}
+
+/* ===== CHROME ===== */
+.chrome{display:flex;align-items:center;gap:6px;background:rgba(0,0,0,.04);border-bottom:1px solid rgba(0,0,0,.06);
+  padding:9px 14px;border-radius:16px 16px 0 0}
+.url-bar{flex:1;font-size:11px;color:var(--text-2);background:rgba(255,255,255,.7);border-radius:6px;padding:3px 10px;text-align:center}
+.repo-card{max-width:760px;margin:0 auto 8px;background:rgba(255,255,255,.7);backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.6);border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.repo-card .body{padding:14px 18px;font-size:13px;color:var(--text-2)}
+
+footer{padding:40px 24px 60px;text-align:center;font-size:12px;color:#9494a3}
+.flink{font-size:12px;color:var(--text-2);margin-top:18px}
+@media (max-width:700px){.content-grid{grid-template-columns:1fr}}
+
+/* SVG anims */
+@keyframes flowArrow{0%{stroke-dashoffset:20}100%{stroke-dashoffset:0}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="logo">llmwiki · harness</span>
+  <div class="nav-scroll">
+    <a class="nl" href="#sec-0">Tổng quan</a>
+    <a class="nl" href="#sec-1">Cấu trúc</a>
+    <a class="nl" href="#sec-2">Kiến trúc 5 lớp</a>
+    <a class="nl" href="#sec-3">Thay đổi hôm nay</a>
+    <a class="nl" href="#sec-4">Luồng làm việc</a>
+    <a class="nl" href="#sec-5">Vận hành</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <h1>llmwiki Harness</h1>
+  <p>Báo cáo nâng cấp 10/06/2026 — từ "quy trình trên giấy" thành harness đúng nghĩa: <b>enforcement bằng máy, audit tự động, evals đo được</b> — và toàn bộ kiến thức để hiểu 100% llmwiki.</p>
+  <div class="legend">
+    <span><i class="dot l"></i> LEGACY — có từ trước (wiki, skills, loops)</span>
+    <span><i class="dot n"></i> MỚI — thêm hôm nay (L0–L4 harness stack)</span>
+  </div>
+</div>
+
+<div class="repo-card">
+  <div class="chrome">
+    <span style="width:12px;height:12px;border-radius:50%;background:#ff5f57"></span>
+    <span style="width:12px;height:12px;border-radius:50%;background:#ffbd2e"></span>
+    <span style="width:12px;height:12px;border-radius:50%;background:#28c840"></span>
+    <div class="url-bar">~/orca/workspaces/TaTa/harness · branch Rheinmir/harness</div>
+  </div>
+  <div class="body">Repo chứa 2 phần: <code>llmwiki/</code> <span class="chip l">legacy</span> template knowledge-base deploy vào project, và <code>harness/</code> <span class="chip n">mới</span> lớp enforcement + evals dùng chung. Proposal đã duyệt: <code>wiki/draft/orca/100626-harness-enforcement-stack.md</code> — test 19/19 pass.</div>
+</div>
+
+<!-- ============ SEC 0: TỔNG QUAN ============ -->
+<section id="sec-0" class="section-bg s-legacy">
+  <div class="section-header sec-l">
+    <span class="tag">01 · LLMWIKI LÀ GÌ</span>
+    <h2>Knowledge-base harness cho AI agent</h2>
+    <p>llmwiki là một <b>template deploy được</b>: thả vào project bất kỳ, nó cho agent (Claude Code, OpenCode…) một bộ nhớ wiki có cấu trúc + bộ quy trình làm việc. Triết lý: <i>prompt ra lệnh một lần — context cấp dữ liệu — harness là cả môi trường vận hành</i>.</p>
+  </div>
+  <div class="content-grid">
+    <div class="card l">
+      <h4>3 vòng lặp cốt lõi <span class="chip l">legacy</span></h4>
+      <ul>
+        <li><b>wiki-loop</b>: <code>ingest</code> (file mới trong raw/ → distill thành wiki) · <code>query</code> (tổng hợp trả lời từ wiki) · <code>lint</code> (dọn wiki định kỳ)</li>
+        <li><b>dev-loop</b>: <code>propose</code> (lập kế hoạch, DỪNG chờ duyệt) · <code>impact-check</code> · <code>safe-change</code> · <code>verify-before-commit</code></li>
+        <li><b>orchestrate</b>: <code>orca-workflow</code> (propose → gate → dispatch đa agent) · <code>orca-onboard</code></li>
+      </ul>
+    </div>
+    <div class="card l">
+      <h4>6 bất biến (rules) <span class="chip l">legacy — trước đây chỉ là chữ</span></h4>
+      <ul>
+        <li><b>R1</b> — agent không bao giờ ghi vào <code>raw/</code> (inbox của con người)</li>
+        <li><b>R2</b> — mọi wiki file phải có <code>## Origin</code> (truy được nguồn)</li>
+        <li><b>R3</b> — <code>index.md</code> luôn khớp tập file wiki</li>
+        <li><b>R4</b> — mọi thao tác được ghi <code>log.md</code></li>
+        <li><b>R5</b> — wiki file chỉ nằm trong <code>concepts/ entities/ sources/ draft/</code></li>
+        <li><b>R6</b> — mọi commit phải qua verify (typecheck/lint/smoke)</li>
+      </ul>
+    </div>
+  </div>
+  <div class="content-grid">
+    <div class="card n">
+      <h4>Vấn đề đã phát hiện → lý do nâng cấp <span class="chip n">hôm nay</span></h4>
+      <ul>
+        <li>6 rules trên chỉ nằm trong CLAUDE.md — model <b>được dặn</b> chứ không <b>bị buộc</b>; quên là hệ thống lặng lẽ sai</li>
+        <li><code>log.md</code> do model tự ghi — quên là log thiếu, không ai biết</li>
+        <li>Không có gì đo wiki tốt lên hay xấu đi</li>
+        <li>Kết luận: đã harness ~70% (process + knowledge), thiếu 30%: <b>enforcement + observability + evals</b></li>
+      </ul>
+    </div>
+    <div class="card n">
+      <h4>Nguyên tắc giải pháp (đã chốt) <span class="chip n">hôm nay</span></h4>
+      <ul>
+        <li>Mọi thứ <b>chạy ngầm</b> — 0 slash command mới</li>
+        <li>Thứ chạy thường xuyên phải là <b>0 token</b> (Python/shell local)</li>
+        <li>LLM chỉ xuất hiện ở eval định kỳ tắt được (~$1-5/tuần)</li>
+        <li><b>Vendor-agnostic</b>: logic nằm ở validators dùng chung; mỗi CLI vendor chỉ là adapter mỏng — có recipe để cook bản mới</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SEC 1: CẤU TRÚC ============ -->
+<section id="sec-1" class="section-bg s-mix">
+  <div class="section-header sec-l">
+    <span class="tag">02 · CẤU TRÚC THƯ MỤC</span>
+    <h2>Cây thư mục — màu nào của ai</h2>
+    <p>Toàn bộ những gì tồn tại trong repo sau hôm nay. <span class="chip l">indigo = legacy</span> <span class="chip n">emerald = mới</span></p>
+  </div>
+  <div class="tree"><span class="cm">harness/ (repo root)</span>
+├── <span class="tn">.pre-commit-config.yaml</span>      <span class="cm">← L2 git backstop, gate mọi commit</span>
+├── <span class="tn">harness/</span>
+│   ├── <span class="tl">harness.md</span>               <span class="cm">← khái niệm (legacy) + kiến trúc 5 lớp (mới append)</span>
+│   ├── <span class="tn">recipe.md</span>                <span class="cm">← ★ RECIPE cook bản vendor khác</span>
+│   ├── <span class="tn">policy.yaml</span>              <span class="cm">← L0: R1..R6 khai báo</span>
+│   ├── <span class="tn">validators/</span>              <span class="cm">← lõi enforcement, dùng chung mọi vendor</span>
+│   │   ├── <span class="tn">no_write_raw.py</span>      <span class="cm">R1</span>
+│   │   ├── <span class="tn">origin_required.py</span>   <span class="cm">R2</span>
+│   │   ├── <span class="tn">index_sync.py</span>        <span class="cm">R3</span>
+│   │   └── <span class="tn">folder_structure.py</span>  <span class="cm">R5</span>
+│   ├── <span class="tn">scripts/wiki-health.py</span>   <span class="cm">← L4 evals tĩnh 0-token</span>
+│   ├── <span class="tn">evals/promptfooconfig.yaml</span> <span class="cm">← L4 golden questions</span>
+│   └── <span class="tn">metrics/wiki-health.csv</span>  <span class="cm">← trend theo thời gian</span>
+└── <span class="tl">llmwiki/</span>                     <span class="cm">← template deploy vào project</span>
+    ├── <span class="tl">CLAUDE.md · AGENT.md</span>     <span class="cm">← behavioral guidelines + rules + bảng skills</span>
+    ├── <span class="tl">raw/</span>                     <span class="cm">← inbox con người thả tài liệu (agent CHỈ ĐỌC)</span>
+    ├── <span class="tl">wiki/</span>
+    │   ├── <span class="tl">index.md</span>             <span class="cm">← mục lục, R3 giữ khớp</span>
+    │   ├── <span class="tl">log.md</span>               <span class="cm">← giờ do máy sinh (SessionEnd hook)</span>
+    │   ├── <span class="tl">active-context.md</span>    <span class="cm">← resume khi mất context</span>
+    │   ├── <span class="tl">concepts/ entities/ sources/</span> <span class="cm">← 3 loại trang wiki</span>
+    │   └── <span class="tl">draft/orca/</span>          <span class="cm">← proposal chờ duyệt</span>
+    ├── <span class="tl">skills/</span>                  <span class="cm">← wiki-loop · dev-loop · orchestrate · utils</span>
+    ├── <span class="tl">orca/flows/</span>              <span class="cm">← flow JSON cho worker agent</span>
+    ├── <span class="tl">html/</span>                    <span class="cm">← báo cáo HTML (file này)</span>
+    └── <span class="tn">.claude/</span>
+        ├── <span class="tn">settings.json</span>        <span class="cm">← permissions.deny + đăng ký 4 hooks</span>
+        └── <span class="tn">hooks/</span>               <span class="cm">← L1 adapter Claude Code (5 file mỏng)</span>
+  </div>
+</section>
+
+<!-- ============ SEC 2: KIẾN TRÚC 5 LỚP ============ -->
+<section id="sec-2" class="section-bg s-new">
+  <div class="section-header sec-n">
+    <span class="tag">03 · KIẾN TRÚC MỚI</span>
+    <h2>5 lớp harness — logic tách khỏi chỗ cắm</h2>
+    <p>Bất biến thiết kế: logic enforcement chỉ sống ở <code>validators/</code>. Adapter của vendor nào cũng mỏng. <b>~80% hệ thống (L0 + validators + L2 + L4) dùng lại nguyên xi khi đổi vendor.</b> Kéo từng ô để khám phá.</p>
+  </div>
+  <div class="diagram-box">
+    <div class="diagram-title">Lớp MỚI (emerald) bảo vệ tài sản LEGACY (indigo)</div>
+    <svg viewBox="0 0 900 350" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="ar-n" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#059669"/></marker>
+        <marker id="ar-l" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#6366f1"/></marker>
+        <style>.flow{stroke-dasharray:6 4;animation:flowArrow 1.2s linear infinite}.pulse{animation:pulse 2.4s ease-in-out infinite}</style>
+      </defs>
+      <!-- L0..L4 -->
+      <rect x="30" y="16" width="200" height="46" rx="8" fill="rgba(255,255,255,.7)" stroke="#059669" stroke-width="2"/>
+      <text x="130" y="35" text-anchor="middle" font-size="11" font-weight="700" fill="#047857">L0 POLICY</text>
+      <text x="130" y="50" text-anchor="middle" font-size="9" fill="#4a4a55">policy.yaml — R1..R6 khai báo</text>
+      <rect x="30" y="82" width="200" height="46" rx="8" fill="rgba(255,255,255,.7)" stroke="#059669" stroke-width="2"/>
+      <text x="130" y="101" text-anchor="middle" font-size="11" font-weight="700" fill="#047857">L1 SESSION</text>
+      <text x="130" y="116" text-anchor="middle" font-size="9" fill="#4a4a55">hooks adapter per vendor</text>
+      <rect x="30" y="148" width="200" height="46" rx="8" fill="rgba(255,255,255,.7)" stroke="#059669" stroke-width="2"/>
+      <text x="130" y="167" text-anchor="middle" font-size="11" font-weight="700" fill="#047857">L2 REPO</text>
+      <text x="130" y="182" text-anchor="middle" font-size="9" fill="#4a4a55">pre-commit — vendor-neutral</text>
+      <rect x="30" y="214" width="200" height="46" rx="8" fill="rgba(255,255,255,.7)" stroke="#059669" stroke-width="2"/>
+      <text x="130" y="233" text-anchor="middle" font-size="11" font-weight="700" fill="#047857">L3 AUDIT</text>
+      <text x="130" y="248" text-anchor="middle" font-size="9" fill="#4a4a55">JSONL tự động + ccusage</text>
+      <rect x="30" y="280" width="200" height="46" rx="8" fill="rgba(255,255,255,.7)" stroke="#059669" stroke-width="2"/>
+      <text x="130" y="299" text-anchor="middle" font-size="11" font-weight="700" fill="#047857">L4 EVALS</text>
+      <text x="130" y="314" text-anchor="middle" font-size="9" fill="#4a4a55">wiki-health 0-token + promptfoo</text>
+      <!-- validators core -->
+      <rect x="380" y="105" width="190" height="70" rx="10" fill="rgba(16,185,129,.1)" stroke="#059669" stroke-width="2.5" class="pulse"/>
+      <text x="475" y="131" text-anchor="middle" font-size="11" font-weight="700" fill="#047857">harness/validators/</text>
+      <text x="475" y="147" text-anchor="middle" font-size="9" fill="#4a4a55">R1 · R2 · R3 · R5</text>
+      <text x="475" y="161" text-anchor="middle" font-size="8.5" fill="#4a4a55">stdin JSON | argv files → exit 0/2</text>
+      <!-- legacy assets -->
+      <rect x="690" y="16" width="180" height="40" rx="8" fill="rgba(255,255,255,.7)" stroke="#6366f1" stroke-width="2"/>
+      <text x="780" y="33" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">raw/ (inbox người)</text>
+      <text x="780" y="47" text-anchor="middle" font-size="8.5" fill="#4a4a55">R1 chặn agent ghi</text>
+      <rect x="690" y="82" width="180" height="40" rx="8" fill="rgba(255,255,255,.7)" stroke="#6366f1" stroke-width="2"/>
+      <text x="780" y="99" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">wiki/ (tri thức)</text>
+      <text x="780" y="113" text-anchor="middle" font-size="8.5" fill="#4a4a55">R2 Origin · R5 folder</text>
+      <rect x="690" y="148" width="180" height="40" rx="8" fill="rgba(255,255,255,.7)" stroke="#6366f1" stroke-width="2"/>
+      <text x="780" y="165" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">git commits</text>
+      <text x="780" y="179" text-anchor="middle" font-size="8.5" fill="#4a4a55">R6 gate trước commit</text>
+      <rect x="690" y="214" width="180" height="40" rx="8" fill="rgba(255,255,255,.7)" stroke="#6366f1" stroke-width="2"/>
+      <text x="780" y="231" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">log.md</text>
+      <text x="780" y="245" text-anchor="middle" font-size="8.5" fill="#4a4a55">R4 — máy sinh, hết quên</text>
+      <rect x="690" y="280" width="180" height="40" rx="8" fill="rgba(255,255,255,.7)" stroke="#6366f1" stroke-width="2"/>
+      <text x="780" y="297" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">chất lượng trả lời</text>
+      <text x="780" y="311" text-anchor="middle" font-size="8.5" fill="#4a4a55">golden questions weekly</text>
+      <!-- lines -->
+      <line x1="130" y1="62" x2="130" y2="82" stroke="#059669" stroke-width="2" marker-end="url(#ar-n)"/>
+      <line x1="230" y1="105" x2="380" y2="125" stroke="#059669" stroke-width="2" class="flow" marker-end="url(#ar-n)"/>
+      <line x1="230" y1="171" x2="380" y2="155" stroke="#059669" stroke-width="2" class="flow" marker-end="url(#ar-n)"/>
+      <line x1="570" y1="120" x2="690" y2="40" stroke="#059669" stroke-width="2" class="flow" marker-end="url(#ar-n)"/>
+      <line x1="570" y1="140" x2="690" y2="100" stroke="#059669" stroke-width="2" class="flow" marker-end="url(#ar-n)"/>
+      <line x1="570" y1="160" x2="690" y2="166" stroke="#059669" stroke-width="2" class="flow" marker-end="url(#ar-n)"/>
+      <line x1="230" y1="237" x2="690" y2="234" stroke="#059669" stroke-width="2" class="flow" marker-end="url(#ar-n)"/>
+      <line x1="230" y1="303" x2="690" y2="300" stroke="#059669" stroke-width="2" class="flow" marker-end="url(#ar-n)"/>
+    </svg>
+  </div>
+  <div class="content-grid">
+    <div class="card n">
+      <h4>Contract của validator — trái tim recipe</h4>
+      <ul>
+        <li>2 chế độ gọi: <b>stdin JSON</b> (hook realtime) và <b>argv files</b> (pre-commit/CLI)</li>
+        <li>Exit <code>0</code> = pass · Exit <code>2</code> = vi phạm, <b>lý do trên stderr viết cho agent đọc và tự sửa</b></li>
+        <li>Fail-open: payload hỏng / không tìm thấy validator → cho qua, L2 vẫn đỡ — harness lỗi không bao giờ brick phiên làm việc</li>
+      </ul>
+      <div class="code-wrap-placeholder"></div>
+<pre class="code-block">{ "action": "write" | "bash" | "stop",
+  "file_path": "wiki/concepts/x.md",
+  "content": "...",          // thiếu → đọc disk
+  "command": "...",          // action=bash
+  "wiki_dir": "path/wiki" }  // action=stop</pre>
+    </div>
+    <div class="card n">
+      <h4>Cook bản vendor mới — 4 bước (recipe.md)</h4>
+      <ul>
+        <li><b>1.</b> Viết adapter L1: normalize payload vendor → JSON contract → subprocess validator → map exit 2 sang cơ chế block của vendor (&lt;100 dòng)</li>
+        <li><b>2.</b> Trỏ L3 vào transcript format của vendor (ccusage hỗ trợ sẵn 15+ CLI)</li>
+        <li><b>3.</b> Đổi block <code>providers:</code> trong promptfooconfig</li>
+        <li><b>4.</b> L0 + validators + L2 <b>giữ nguyên</b> — copy pre-commit config, sửa prefix path</li>
+      </ul>
+      <ul style="margin-top:8px">
+        <li>Mức block per vendor: Claude Code đủ 3 tầng · OpenCode tốt · Cursor trung bình · Codex yếu → L2 là gate cứng duy nhất</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SEC 3: THAY ĐỔI HÔM NAY ============ -->
+<section id="sec-3" class="section-bg s-new">
+  <div class="section-header sec-n">
+    <span class="tag">04 · THAY ĐỔI HÔM NAY</span>
+    <h2>Chi tiết từng file đã tạo / sửa</h2>
+    <p>Tất cả ra đời từ quy trình chuẩn của chính llmwiki: crawl GitHub verify giải pháp → propose → user duyệt → implement → test 19/19 pass.</p>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <tr><th style="width:34%">File</th><th style="width:10%">Lớp</th><th>Vai trò</th></tr>
+      <tr class="rn"><td><code>harness/recipe.md</code></td><td>★</td><td><b>Recipe kiến trúc</b> — tài liệu trung tâm để cook bản vendor khác: contract, bảng enforcement-point per vendor, quy trình 4 bước</td></tr>
+      <tr class="rn"><td><code>harness/policy.yaml</code></td><td>L0</td><td>6 bất biến R1..R6 dạng khai báo — vendor-free, là "nguồn sự thật" của mọi enforcement</td></tr>
+      <tr class="rn"><td><code>harness/validators/no_write_raw.py</code></td><td>core</td><td>R1 — chặn Write/Edit + cả lệnh bash (redirect, tee, cp/mv đích raw/). Đọc từ raw/ vẫn OK</td></tr>
+      <tr class="rn"><td><code>harness/validators/origin_required.py</code></td><td>core</td><td>R2 — file nội dung wiki thiếu <code>## Origin</code> → exit 2, agent tự sửa ngay trong phiên</td></tr>
+      <tr class="rn"><td><code>harness/validators/index_sync.py</code></td><td>core</td><td>R3 — so tập file wiki thực tế với link trong index.md, liệt kê thiếu/thừa</td></tr>
+      <tr class="rn"><td><code>harness/validators/folder_structure.py</code></td><td>core</td><td>R5 — file .md trong wiki/ phải nằm đúng concepts/entities/sources/draft</td></tr>
+      <tr class="rn"><td><code>llmwiki/.claude/settings.json</code></td><td>L1</td><td><code>permissions.deny</code> chặn raw/** trước cả hook + đăng ký 4 hooks</td></tr>
+      <tr class="rn"><td><code>llmwiki/.claude/hooks/</code> (5 file)</td><td>L1</td><td>hooklib + pre_tool_use + post_tool_use + stop + session_end — adapter mỏng, chỉ wire payload → validators</td></tr>
+      <tr class="rn"><td><code>.pre-commit-config.yaml</code> (root)</td><td>L2</td><td>Git backstop: chạy lại đúng validators + wiki-health khi commit — agent/người nào commit cũng bị gate</td></tr>
+      <tr class="rn"><td><code>harness/scripts/wiki-health.py</code></td><td>L4</td><td>Evals tĩnh 0-token: broken wikilink, orphan, index coverage, stale (git) — xuất JSON + append CSV trend</td></tr>
+      <tr class="rn"><td><code>harness/evals/promptfooconfig.yaml</code></td><td>L4</td><td>Golden-question regression: assertion deterministic (icontains) + cost threshold, KHÔNG judge model</td></tr>
+      <tr class="rl"><td><code>llmwiki/wiki/log.md</code></td><td>sửa</td><td>Chuyển sang máy sinh: SessionEnd hook đọc audit JSONL append dòng tổng kết phiên</td></tr>
+      <tr class="rl"><td><code>harness/harness.md</code></td><td>sửa</td><td>Append kiến trúc 5 lớp + checklist 12 primitive (so với awesome-harness-engineering)</td></tr>
+      <tr class="rl"><td><code>llmwiki/wiki/index.md</code> · <code>draft/orca/100626-*.md</code></td><td>sửa</td><td>Proposal được duyệt → implemented; index có row mới (chính R3 bắt được lúc test)</td></tr>
+    </table>
+  </div>
+  <div class="content-grid">
+    <div class="card n">
+      <h4>Test 19/19 pass — và 3 bug thật bị bắt</h4>
+      <ul>
+        <li>Regex bash ban đầu <b>không bắt</b> được <code>echo hi &gt; raw/x.md</code> → viết lại pattern redirect + tách riêng cp/mv theo đích</li>
+        <li><code>split("wiki/")</code> dính nhầm chữ <code>llmwiki/</code> → đổi sang regex boundary <code>(^|/)wiki/</code></li>
+        <li><code>str | None</code> crash trên Python 3.9 của máy → bỏ union syntax</li>
+        <li>Bonus: R3 tự bắt được chính proposal chưa có trong index.md — bằng chứng sống hệ thống hoạt động</li>
+      </ul>
+    </div>
+    <div class="card n">
+      <h4>Nguồn đã crawl verify (10/06/2026)</h4>
+      <ul>
+        <li><a href="https://github.com/ryoppippi/ccusage">ccusage</a> 15.9k★ v20.0.9 (09/06) — cost tracking 15+ CLI</li>
+        <li><a href="https://github.com/ai-boost/awesome-harness-engineering">awesome-harness-engineering</a> 1.8k★ — khung 12 primitive</li>
+        <li><a href="https://statewright.ai/">statewright</a> — state-machine guardrail cross-vendor (PoC sau)</li>
+        <li><a href="https://github.com/dwarvesf/claude-guardrails">dwarvesf/claude-guardrails</a> v0.3.8 · <a href="https://github.com/disler/claude-code-hooks-mastery">hooks-mastery</a> · <a href="https://www.promptfoo.dev/docs/guides/evaluate-coding-agents/">promptfoo agent eval</a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SEC 4: LUỒNG LÀM VIỆC ============ -->
+<section id="sec-4" class="section-bg s-mix">
+  <div class="section-header sec-m">
+    <span class="tag">05 · LUỒNG LÀM VIỆC MIX</span>
+    <h2>Luồng cũ vẫn nguyên — các chốt chặn mới cài vào giữa</h2>
+    <p>Không có bước nào của quy trình cũ bị thay; điểm khác duy nhất là giờ đây sai ở đâu bị <b>chặn bằng máy ngay tại đó</b>. Indigo = bước cũ · Emerald = chốt mới.</p>
+  </div>
+
+  <div class="diagram-box">
+    <div class="diagram-title">① Mỗi tool call trong phiên agent (mọi luồng đều chạy qua đây)</div>
+    <svg viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="a2n" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#059669"/></marker>
+        <marker id="a2l" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#6366f1"/></marker>
+        <style>.flow{stroke-dasharray:6 4;animation:flowArrow 1.2s linear infinite}</style>
+      </defs>
+      <rect x="20" y="36" width="110" height="44" rx="8" fill="rgba(255,255,255,.7)" stroke="#6366f1" stroke-width="2"/>
+      <text x="75" y="55" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">User prompt</text>
+      <text x="75" y="69" text-anchor="middle" font-size="8.5" fill="#4a4a55">legacy</text>
+      <rect x="180" y="36" width="130" height="44" rx="8" fill="rgba(255,255,255,.7)" stroke="#6366f1" stroke-width="2"/>
+      <text x="245" y="55" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">Claude suy luận</text>
+      <text x="245" y="69" text-anchor="middle" font-size="8.5" fill="#4a4a55">chọn tool</text>
+      <rect x="360" y="36" width="130" height="44" rx="8" fill="rgba(16,185,129,.1)" stroke="#059669" stroke-width="2.5"/>
+      <text x="425" y="55" text-anchor="middle" font-size="10.5" font-weight="700" fill="#047857">PreToolUse ✚</text>
+      <text x="425" y="69" text-anchor="middle" font-size="8.5" fill="#4a4a55">R1 + R5 trước khi chạy</text>
+      <rect x="540" y="36" width="120" height="44" rx="8" fill="rgba(255,255,255,.7)" stroke="#6366f1" stroke-width="2"/>
+      <text x="600" y="55" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">Tool thực thi</text>
+      <text x="600" y="69" text-anchor="middle" font-size="8.5" fill="#4a4a55">Write / Edit / Bash</text>
+      <rect x="710" y="36" width="140" height="44" rx="8" fill="rgba(16,185,129,.1)" stroke="#059669" stroke-width="2.5"/>
+      <text x="780" y="55" text-anchor="middle" font-size="10.5" font-weight="700" fill="#047857">PostToolUse ✚</text>
+      <text x="780" y="69" text-anchor="middle" font-size="8.5" fill="#4a4a55">R2 Origin + audit JSONL</text>
+      <rect x="360" y="150" width="190" height="44" rx="8" fill="rgba(16,185,129,.1)" stroke="#059669" stroke-width="2"/>
+      <text x="455" y="169" text-anchor="middle" font-size="10.5" font-weight="700" fill="#047857">exit 2 → DENY + lý do</text>
+      <text x="455" y="183" text-anchor="middle" font-size="8.5" fill="#4a4a55">stderr quay về Claude → tự sửa</text>
+      <rect x="710" y="150" width="140" height="44" rx="8" fill="rgba(16,185,129,.1)" stroke="#059669" stroke-width="2"/>
+      <text x="780" y="169" text-anchor="middle" font-size="10.5" font-weight="700" fill="#047857">.claude/audit/*.jsonl</text>
+      <text x="780" y="183" text-anchor="middle" font-size="8.5" fill="#4a4a55">máy ghi — hết "quên log"</text>
+      <rect x="180" y="230" width="150" height="44" rx="8" fill="rgba(16,185,129,.1)" stroke="#059669" stroke-width="2.5"/>
+      <text x="255" y="249" text-anchor="middle" font-size="10.5" font-weight="700" fill="#047857">Stop hook ✚</text>
+      <text x="255" y="263" text-anchor="middle" font-size="8.5" fill="#4a4a55">R3: index lệch = không cho dừng</text>
+      <rect x="400" y="230" width="160" height="44" rx="8" fill="rgba(16,185,129,.1)" stroke="#059669" stroke-width="2"/>
+      <text x="480" y="249" text-anchor="middle" font-size="10.5" font-weight="700" fill="#047857">SessionEnd ✚</text>
+      <text x="480" y="263" text-anchor="middle" font-size="8.5" fill="#4a4a55">tự append tổng kết phiên</text>
+      <rect x="630" y="230" width="120" height="44" rx="8" fill="rgba(255,255,255,.7)" stroke="#6366f1" stroke-width="2"/>
+      <text x="690" y="249" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">wiki/log.md</text>
+      <text x="690" y="263" text-anchor="middle" font-size="8.5" fill="#4a4a55">legacy file, nguồn mới</text>
+      <line x1="130" y1="58" x2="180" y2="58" stroke="#6366f1" stroke-width="2" class="flow" marker-end="url(#a2l)"/>
+      <line x1="310" y1="58" x2="360" y2="58" stroke="#6366f1" stroke-width="2" class="flow" marker-end="url(#a2l)"/>
+      <line x1="490" y1="58" x2="540" y2="58" stroke="#059669" stroke-width="2" class="flow" marker-end="url(#a2n)"/>
+      <line x1="660" y1="58" x2="710" y2="58" stroke="#6366f1" stroke-width="2" class="flow" marker-end="url(#a2l)"/>
+      <line x1="425" y1="80" x2="445" y2="150" stroke="#059669" stroke-width="2" class="flow" marker-end="url(#a2n)"/>
+      <line x1="360" y1="172" x2="245" y2="80" stroke="#059669" stroke-width="2" class="flow" marker-end="url(#a2n)"/>
+      <line x1="780" y1="80" x2="780" y2="150" stroke="#059669" stroke-width="2" class="flow" marker-end="url(#a2n)"/>
+      <line x1="245" y1="80" x2="252" y2="230" stroke="#6366f1" stroke-width="2" class="flow" marker-end="url(#a2l)"/>
+      <line x1="330" y1="252" x2="400" y2="252" stroke="#059669" stroke-width="2" class="flow" marker-end="url(#a2n)"/>
+      <line x1="560" y1="252" x2="630" y2="252" stroke="#059669" stroke-width="2" class="flow" marker-end="url(#a2n)"/>
+    </svg>
+  </div>
+
+  <div class="diagram-box">
+    <div class="diagram-title">② Dev-loop: propose → gate → implement → commit (luồng cũ + 3 chốt mới)</div>
+    <svg viewBox="0 0 900 280" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="a3n" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#059669"/></marker>
+        <marker id="a3l" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#6366f1"/></marker>
+        <style>.flow{stroke-dasharray:6 4;animation:flowArrow 1.2s linear infinite}</style>
+      </defs>
+      <rect x="20" y="30" width="130" height="44" rx="8" fill="rgba(255,255,255,.7)" stroke="#6366f1" stroke-width="2"/>
+      <text x="85" y="49" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">skill: propose</text>
+      <text x="85" y="63" text-anchor="middle" font-size="8.5" fill="#4a4a55">tạo draft, DỪNG</text>
+      <rect x="200" y="30" width="150" height="44" rx="8" fill="rgba(255,255,255,.7)" stroke="#6366f1" stroke-width="2"/>
+      <text x="275" y="49" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">draft/orca/DDMMYY-*.md</text>
+      <text x="275" y="63" text-anchor="middle" font-size="8.5" fill="#4a4a55">kế hoạch, chưa làm gì</text>
+      <rect x="400" y="30" width="120" height="44" rx="8" fill="rgba(255,255,255,.7)" stroke="#6366f1" stroke-width="2"/>
+      <text x="460" y="49" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">USER GATE 🚦</text>
+      <text x="460" y="63" text-anchor="middle" font-size="8.5" fill="#4a4a55">"duyệt" mới đi tiếp</text>
+      <rect x="570" y="30" width="130" height="44" rx="8" fill="rgba(255,255,255,.7)" stroke="#6366f1" stroke-width="2"/>
+      <text x="635" y="49" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">implement</text>
+      <text x="635" y="63" text-anchor="middle" font-size="8.5" fill="#4a4a55">đúng scope đã duyệt</text>
+      <rect x="750" y="30" width="130" height="44" rx="8" fill="rgba(16,185,129,.1)" stroke="#059669" stroke-width="2.5"/>
+      <text x="815" y="49" text-anchor="middle" font-size="10.5" font-weight="700" fill="#047857">hooks canh ✚</text>
+      <text x="815" y="63" text-anchor="middle" font-size="8.5" fill="#4a4a55">mỗi edit qua luồng ①</text>
+      <rect x="20" y="170" width="170" height="44" rx="8" fill="rgba(255,255,255,.7)" stroke="#6366f1" stroke-width="2"/>
+      <text x="105" y="189" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">verify-before-commit</text>
+      <text x="105" y="203" text-anchor="middle" font-size="8.5" fill="#4a4a55">skill cũ: typecheck/smoke</text>
+      <rect x="250" y="170" width="120" height="44" rx="8" fill="rgba(255,255,255,.7)" stroke="#6366f1" stroke-width="2"/>
+      <text x="310" y="189" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">git commit</text>
+      <rect x="430" y="170" width="160" height="44" rx="8" fill="rgba(16,185,129,.1)" stroke="#059669" stroke-width="2.5"/>
+      <text x="510" y="189" text-anchor="middle" font-size="10.5" font-weight="700" fill="#047857">pre-commit gate ✚</text>
+      <text x="510" y="203" text-anchor="middle" font-size="8.5" fill="#4a4a55">R2 R3 R5 + wiki-health</text>
+      <rect x="650" y="170" width="230" height="44" rx="8" fill="rgba(255,255,255,.7)" stroke="#6366f1" stroke-width="2"/>
+      <text x="765" y="189" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">wiki entry + promote draft</text>
+      <text x="765" y="203" text-anchor="middle" font-size="8.5" fill="#4a4a55">chỉ SAU khi commit (rule cũ)</text>
+      <line x1="150" y1="52" x2="200" y2="52" stroke="#6366f1" stroke-width="2" class="flow" marker-end="url(#a3l)"/>
+      <line x1="350" y1="52" x2="400" y2="52" stroke="#6366f1" stroke-width="2" class="flow" marker-end="url(#a3l)"/>
+      <line x1="520" y1="52" x2="570" y2="52" stroke="#6366f1" stroke-width="2" class="flow" marker-end="url(#a3l)"/>
+      <line x1="700" y1="52" x2="750" y2="52" stroke="#059669" stroke-width="2" class="flow" marker-end="url(#a3n)"/>
+      <line x1="635" y1="74" x2="110" y2="170" stroke="#6366f1" stroke-width="2" class="flow" marker-end="url(#a3l)"/>
+      <line x1="190" y1="192" x2="250" y2="192" stroke="#6366f1" stroke-width="2" class="flow" marker-end="url(#a3l)"/>
+      <line x1="370" y1="192" x2="430" y2="192" stroke="#059669" stroke-width="2" class="flow" marker-end="url(#a3n)"/>
+      <line x1="590" y1="192" x2="650" y2="192" stroke="#6366f1" stroke-width="2" class="flow" marker-end="url(#a3l)"/>
+    </svg>
+  </div>
+
+  <div class="diagram-box">
+    <div class="diagram-title">③ Wiki-loop: tri thức vào hệ thống (luồng cũ) + vòng đo mới chạy nền</div>
+    <svg viewBox="0 0 900 230" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="a4n" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#059669"/></marker>
+        <marker id="a4l" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#6366f1"/></marker>
+        <style>.flow{stroke-dasharray:6 4;animation:flowArrow 1.2s linear infinite}</style>
+      </defs>
+      <rect x="20" y="30" width="120" height="44" rx="8" fill="rgba(255,255,255,.7)" stroke="#6366f1" stroke-width="2"/>
+      <text x="80" y="49" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">raw/ inbox</text>
+      <text x="80" y="63" text-anchor="middle" font-size="8.5" fill="#4a4a55">người thả tài liệu</text>
+      <rect x="200" y="30" width="120" height="44" rx="8" fill="rgba(255,255,255,.7)" stroke="#6366f1" stroke-width="2"/>
+      <text x="260" y="49" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">skill: ingest</text>
+      <text x="260" y="63" text-anchor="middle" font-size="8.5" fill="#4a4a55">distill tri thức</text>
+      <rect x="380" y="30" width="170" height="44" rx="8" fill="rgba(255,255,255,.7)" stroke="#6366f1" stroke-width="2"/>
+      <text x="465" y="49" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">wiki pages + [[wikilinks]]</text>
+      <text x="465" y="63" text-anchor="middle" font-size="8.5" fill="#4a4a55">concepts · entities · sources</text>
+      <rect x="610" y="30" width="120" height="44" rx="8" fill="rgba(255,255,255,.7)" stroke="#6366f1" stroke-width="2"/>
+      <text x="670" y="49" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">skill: query</text>
+      <text x="670" y="63" text-anchor="middle" font-size="8.5" fill="#4a4a55">trả lời từ wiki</text>
+      <rect x="780" y="30" width="100" height="44" rx="8" fill="rgba(255,255,255,.7)" stroke="#6366f1" stroke-width="2"/>
+      <text x="830" y="49" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">skill: lint</text>
+      <text x="830" y="63" text-anchor="middle" font-size="8.5" fill="#4a4a55">dọn định kỳ</text>
+      <rect x="200" y="150" width="180" height="44" rx="8" fill="rgba(16,185,129,.1)" stroke="#059669" stroke-width="2.5"/>
+      <text x="290" y="169" text-anchor="middle" font-size="10.5" font-weight="700" fill="#047857">wiki-health.py ✚ (cron)</text>
+      <text x="290" y="183" text-anchor="middle" font-size="8.5" fill="#4a4a55">orphan · broken link · stale → CSV</text>
+      <rect x="440" y="150" width="190" height="44" rx="8" fill="rgba(16,185,129,.1)" stroke="#059669" stroke-width="2.5"/>
+      <text x="535" y="169" text-anchor="middle" font-size="10.5" font-weight="700" fill="#047857">promptfoo weekly ✚</text>
+      <text x="535" y="183" text-anchor="middle" font-size="8.5" fill="#4a4a55">golden questions → pass-rate trend</text>
+      <rect x="690" y="150" width="190" height="44" rx="8" fill="rgba(16,185,129,.1)" stroke="#059669" stroke-width="2"/>
+      <text x="785" y="169" text-anchor="middle" font-size="10.5" font-weight="700" fill="#047857">ccusage statusline ✚</text>
+      <text x="785" y="183" text-anchor="middle" font-size="8.5" fill="#4a4a55">cost/token mọi phiên, mọi CLI</text>
+      <line x1="140" y1="52" x2="200" y2="52" stroke="#6366f1" stroke-width="2" class="flow" marker-end="url(#a4l)"/>
+      <line x1="320" y1="52" x2="380" y2="52" stroke="#6366f1" stroke-width="2" class="flow" marker-end="url(#a4l)"/>
+      <line x1="550" y1="52" x2="610" y2="52" stroke="#6366f1" stroke-width="2" class="flow" marker-end="url(#a4l)"/>
+      <line x1="730" y1="52" x2="780" y2="52" stroke="#6366f1" stroke-width="2" class="flow" marker-end="url(#a4l)"/>
+      <line x1="430" y1="74" x2="295" y2="150" stroke="#059669" stroke-width="2" class="flow" marker-end="url(#a4n)"/>
+      <line x1="490" y1="74" x2="530" y2="150" stroke="#059669" stroke-width="2" class="flow" marker-end="url(#a4n)"/>
+    </svg>
+  </div>
+
+  <div class="content-grid">
+    <div class="card l">
+      <h4>Những gì KHÔNG đổi</h4>
+      <ul>
+        <li>Mọi skill, mọi loop, mọi quy tắc nội dung — y nguyên</li>
+        <li>Propose vẫn dừng chờ duyệt; wiki entry vẫn chỉ tạo sau commit</li>
+        <li>Cách bạn dùng hằng ngày không khác gì — 0 lệnh mới phải nhớ</li>
+      </ul>
+    </div>
+    <div class="card n">
+      <h4>Những gì đổi về bản chất</h4>
+      <ul>
+        <li>Rule từ "lời dặn" → "luật vật lý": vi phạm bị chặn ngay tại tool call hoặc tại commit</li>
+        <li>Log từ "model nhớ thì ghi" → "máy luôn ghi"</li>
+        <li>Chất lượng wiki từ "cảm giác" → "số liệu CSV + pass-rate"</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SEC 5: VẬN HÀNH ============ -->
+<section id="sec-5" class="section-bg s-new">
+  <div class="section-header sec-n">
+    <span class="tag">06 · VẬN HÀNH</span>
+    <h2>Kích hoạt, chi phí, và checklist 12 primitive</h2>
+    <p>Mọi thứ đã nằm trong repo nhưng <b>chưa commit</b> và L2 cần cài pre-commit một lần.</p>
+  </div>
+  <div class="content-grid">
+    <div class="card n">
+      <h4>Việc còn lại để kích hoạt 100%</h4>
+      <ul class="checklist">
+        <li><input type="checkbox" id="c1"><label for="c1">Commit toàn bộ (qua <code>verify-before-commit</code> để promote draft)</label></li>
+        <li><input type="checkbox" id="c2"><label for="c2">Cài L2: <code>pipx install pre-commit && pre-commit install</code></label></li>
+        <li><input type="checkbox" id="c3"><label for="c3">Bật ccusage statusline: <code>npx ccusage statusline</code></label></li>
+        <li><input type="checkbox" id="c4"><label for="c4">Khi wiki có nội dung: thay 3 câu mẫu bằng 15-20 golden questions thật</label></li>
+        <li><input type="checkbox" id="c5"><label for="c5">Cron weekly: <code>wiki-health.py --csv</code> + <code>promptfoo eval</code></label></li>
+        <li><input type="checkbox" id="c6"><label for="c6">(Tùy chọn) PoC statewright nếu mở rộng nhiều vendor</label></li>
+      </ul>
+    </div>
+    <div class="card n">
+      <h4>Lệnh hay dùng</h4>
+<pre class="code-block"># Sức khỏe wiki (0 token)
+python3 harness/scripts/wiki-health.py \
+  --wiki-dir llmwiki/wiki --csv harness/metrics/wiki-health.csv
+
+# Test validator bằng tay
+printf '%s' '{"action":"write","file_path":"wiki/x.md"}' \
+  | python3 harness/validators/folder_structure.py
+
+# Golden-question eval (~$1-5/lượt)
+npx promptfoo@latest eval -c harness/evals/promptfooconfig.yaml
+
+# Cost mọi phiên, mọi CLI
+npx ccusage@latest daily</pre>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <tr><th>Lớp</th><th>Tần suất</th><th>Token</th><th>Slash mới</th></tr>
+      <tr class="rn"><td>L0–L2 enforcement</td><td>mỗi tool call / mỗi commit</td><td><b>0</b> (Python local)</td><td>0</td></tr>
+      <tr class="rn"><td>L3 audit + ccusage</td><td>mỗi event</td><td><b>0</b></td><td>0</td></tr>
+      <tr class="rn"><td>L4 wiki-health</td><td>cron / pre-commit</td><td><b>0</b></td><td>0</td></tr>
+      <tr class="rn"><td>L4 promptfoo</td><td>weekly, tắt được</td><td>~$1–5/lượt (generation only)</td><td>0</td></tr>
+    </table>
+  </div>
+  <div class="content-grid">
+    <div class="card l">
+      <h4>Checklist 12 primitive — phần đã có từ trước</h4>
+      <ul>
+        <li>Agent loop · Planning · Context delivery · Tool design (skills)</li>
+        <li>Skills & MCP · Memory & state (wiki + active-context)</li>
+        <li>Orchestration (Orca flows) · Human-in-the-loop (propose gate)</li>
+      </ul>
+    </div>
+    <div class="card n">
+      <h4>Checklist 12 primitive — phần lấp hôm nay</h4>
+      <ul>
+        <li>Permissions & authorization → <code>permissions.deny</code> + PreToolUse</li>
+        <li>Verification & CI → pre-commit validators</li>
+        <li>Observability & tracing → JSONL audit + ccusage</li>
+        <li>Debugging & DX → fail-open, stderr viết cho agent đọc</li>
+      </ul>
+    </div>
+  </div>
+  <p class="flink">Chi tiết: <a href="../../harness/recipe.md">harness/recipe.md</a> · <a href="../../harness/policy.yaml">policy.yaml</a> · <a href="../wiki/draft/orca/100626-harness-enforcement-stack.md">proposal đã duyệt</a></p>
+</section>
+
+<footer>llmwiki harness · báo cáo sinh ngày 10/06/2026 · indigo = legacy · emerald = mới</footer>
+
+<script>
+// scroll spy
+const links=[...document.querySelectorAll('nav a.nl')];
+const sections=[...document.querySelectorAll('section[id]')];
+const observer=new IntersectionObserver(entries=>{
+  let active='';
+  for(const entry of entries){if(entry.isIntersecting)active=entry.target.id}
+  if(active)links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+active));
+},{rootMargin:'-40% 0px -55% 0px'});
+sections.forEach(s=>observer.observe(s));
+
+// draggable diagrams
+function initDraggableDiagrams(){
+  const NS='http://www.w3.org/2000/svg';
+  const nearest=(nodes,x,y)=>{let best=null,bd=1e9;
+    nodes.forEach(n=>{const cx=Math.max(n.x,Math.min(x,n.x+n.w)),cy=Math.max(n.y,Math.min(y,n.y+n.h));
+      const d=Math.hypot(x-cx,y-cy);if(d<bd){bd=d;best=n}});
+    return bd<=42?best:null};
+  document.querySelectorAll('.diagram-box').forEach(box=>{
+    const svg=box.querySelector('svg');if(!svg||box.dataset.draggable)return;box.dataset.draggable='1';
+    const vp=document.createElement('div');vp.className='diagram-viewport';box.insertBefore(vp,svg);vp.appendChild(svg);
+    const hint=document.createElement('div');hint.className='diagram-hint';
+    hint.textContent='✥ kéo từng ô · kéo nền để pan · cuộn để zoom · kéo mép dưới để mở rộng';box.appendChild(hint);
+    const reset=document.createElement('button');reset.className='diagram-reset';reset.textContent='⟲ reset';box.appendChild(reset);
+    const allRects=[...svg.querySelectorAll('rect')];
+    const nodes=allRects.filter(r=>(+r.getAttribute('width'))>=70&&(+r.getAttribute('height'))>=30)
+      .map(r=>({rect:r,x:+r.getAttribute('x'),y:+r.getAttribute('y'),w:+r.getAttribute('width'),h:+r.getAttribute('height'),els:[r],tx:0,ty:0}));
+    const inNode=(px,py)=>nodes.find(n=>px>=n.x-1&&px<=n.x+n.w+1&&py>=n.y-1&&py<=n.y+n.h+1);
+    [...svg.querySelectorAll('text')].forEach(t=>{const x=parseFloat(t.getAttribute('x')),y=parseFloat(t.getAttribute('y'));
+      if(isNaN(x)||isNaN(y))return;const n=inNode(x,y);if(n)n.els.push(t)});
+    allRects.forEach(r=>{if(nodes.some(n=>n.rect===r))return;
+      const x=+r.getAttribute('x'),y=+r.getAttribute('y'),w=+r.getAttribute('width')||0,h=+r.getAttribute('height')||0;
+      const n=inNode(x+w/2,y+h/2);if(n)n.els.push(r)});
+    nodes.forEach(n=>{const g=document.createElementNS(NS,'g');g.setAttribute('class','dnode');
+      n.rect.parentNode.insertBefore(g,n.rect);n.els.forEach(el=>g.appendChild(el));n.g=g});
+    const linksEls=[...svg.querySelectorAll('line')].filter(l=>l.hasAttribute('x1')&&l.hasAttribute('x2'));
+    linksEls.forEach(l=>{l._x1=+l.getAttribute('x1');l._y1=+l.getAttribute('y1');l._x2=+l.getAttribute('x2');l._y2=+l.getAttribute('y2');
+      l._n1=nearest(nodes,l._x1,l._y1);l._n2=nearest(nodes,l._x2,l._y2)});
+    const reroute=()=>linksEls.forEach(l=>{
+      if(l._n1){l.setAttribute('x1',l._x1+l._n1.tx);l.setAttribute('y1',l._y1+l._n1.ty)}
+      if(l._n2){l.setAttribute('x2',l._x2+l._n2.tx);l.setAttribute('y2',l._y2+l._n2.ty)}});
+    const vbBase=(svg.getAttribute('viewBox')||'0 0 900 200').split(/\s+/).map(Number);
+    const fitViewBox=()=>{const pad=16;
+      let minX=vbBase[0],minY=vbBase[1],maxX=vbBase[0]+vbBase[2],maxY=vbBase[1]+vbBase[3];
+      nodes.forEach(n=>{minX=Math.min(minX,n.x+n.tx-pad);minY=Math.min(minY,n.y+n.ty-pad);
+        maxX=Math.max(maxX,n.x+n.w+n.tx+pad);maxY=Math.max(maxY,n.y+n.h+n.ty+pad)});
+      svg.setAttribute('viewBox',`${minX} ${minY} ${maxX-minX} ${maxY-minY}`)};
+    let ptx=0,pty=0,scale=1;
+    const applyCanvas=()=>{svg.style.transform=`translate(${ptx}px,${pty}px) scale(${scale})`};
+    const toSvg=(cx,cy)=>{const p=svg.createSVGPoint();p.x=cx;p.y=cy;return p.matrixTransform(svg.getScreenCTM().inverse())};
+    let mode=null,node=null,start=null,t0=null,p0=null;
+    vp.addEventListener('pointerdown',e=>{vp.setPointerCapture(e.pointerId);
+      const g=e.target.closest&&e.target.closest('g.dnode');
+      if(g){mode='node';node=nodes.find(n=>n.g===g);start=toSvg(e.clientX,e.clientY);t0={x:node.tx,y:node.ty}}
+      else{mode='pan';p0={x:e.clientX-ptx,y:e.clientY-pty};vp.classList.add('grabbing')}});
+    vp.addEventListener('pointermove',e=>{
+      if(mode==='node'){const c=toSvg(e.clientX,e.clientY);node.tx=t0.x+(c.x-start.x);node.ty=t0.y+(c.y-start.y);
+        node.g.setAttribute('transform',`translate(${node.tx},${node.ty})`);reroute()}
+      else if(mode==='pan'){ptx=e.clientX-p0.x;pty=e.clientY-p0.y;applyCanvas()}});
+    const end=()=>{if(mode==='node')fitViewBox();mode=null;node=null;vp.classList.remove('grabbing')};
+    vp.addEventListener('pointerup',end);vp.addEventListener('pointercancel',end);
+    vp.addEventListener('wheel',e=>{e.preventDefault();
+      const r=vp.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;
+      const ns=Math.min(4,Math.max(0.5,scale*(e.deltaY<0?1.1:0.9)));
+      ptx=mx-(mx-ptx)*(ns/scale);pty=my-(my-pty)*(ns/scale);scale=ns;applyCanvas()},{passive:false});
+    const doReset=()=>{ptx=0;pty=0;scale=1;svg.style.transition='transform .3s cubic-bezier(.4,0,.2,1)';applyCanvas();
+      setTimeout(()=>{svg.style.transition=''},320);
+      nodes.forEach(n=>{n.tx=0;n.ty=0;n.g.setAttribute('transform','translate(0,0)')});reroute();fitViewBox()};
+    reset.addEventListener('click',doReset);vp.addEventListener('dblclick',doReset);
+  });
+}
+initDraggableDiagrams();
+
+// copy buttons
+function initCodeCopy(){
+  document.querySelectorAll('pre.code-block').forEach(pre=>{
+    if(pre.dataset.copy)return;pre.dataset.copy='1';
+    const code=pre.textContent;
+    const wrap=document.createElement('div');wrap.className='code-wrap';
+    pre.parentNode.insertBefore(wrap,pre);wrap.appendChild(pre);
+    const btn=document.createElement('button');btn.className='code-copy';btn.textContent='Copy';
+    wrap.appendChild(btn);
+    btn.addEventListener('click',async()=>{
+      try{await navigator.clipboard.writeText(code)}
+      catch{const ta=document.createElement('textarea');ta.value=code;
+        document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove()}
+      btn.textContent='✓ Copied';btn.classList.add('copied');
+      setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied')},1500)});
+  });
+}
+initCodeCopy();
+</script>
+</body>
+</html>

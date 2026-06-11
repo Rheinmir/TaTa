@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sequence per-task — R7 proposal-enforcement (propose 110626)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2f0f7;--text-2:#4a4a55;--legacy:#6366f1;--legacy-dark:#4338ca;--new:#059669;--new-dark:#047857;--warn:#d97706}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:#0f0f12;font-family:'Inter',-apple-system,sans-serif;line-height:1.6}
+.hero{padding:48px 24px 8px;text-align:center;max-width:860px;margin:0 auto}
+.hero h1{font-size:clamp(22px,3.5vw,34px);font-weight:800;background:linear-gradient(135deg,#6366f1,#a855f7,#ec4899);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin-top:8px;font-size:13.5px;color:var(--text-2)} .hero a{color:var(--legacy-dark)}
+main{max-width:1040px;margin:0 auto;padding:16px 24px 60px}
+.diagram-box{background:rgba(255,255,255,.7);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.6);
+  border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.06);padding:20px;margin:18px 0;cursor:pointer}
+.diagram-title{font-size:13.5px;font-weight:800;margin-bottom:2px}
+.diagram-agent{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.4px;border-radius:14px;padding:2px 9px;background:rgba(99,102,241,.12);color:#4338ca;margin-left:6px;vertical-align:2px}
+.caption{min-height:32px;display:flex;align-items:center;gap:9px;font-size:12.5px;font-weight:600;
+  background:rgba(0,0,0,.04);border-radius:10px;padding:6px 13px;margin:8px 0 12px;color:var(--text-2)}
+.caption .stepno{flex-shrink:0;font-size:10.5px;font-weight:800;background:var(--legacy);color:#fff;border-radius:14px;padding:1px 9px}
+svg{width:100%;height:auto;display:block;user-select:none}
+.msg{opacity:0;transition:opacity .35s ease}.msg.on{opacity:1}.msg.cur text.lbl{font-weight:800}
+footer{text-align:center;font-size:12px;color:#9494a3;padding:22px} footer a{color:var(--legacy-dark)}
+</style>
+</head>
+<body>
+<div class="hero">
+  <h1>R7 proposal-enforcement — sequence từng task</h1>
+  <p>Propose: <a href="../wiki/draft/orca/110626-proposal-enforcement.md">110626-proposal-enforcement.md</a> · mỗi task trong Plan có đúng một diagram · indigo = có sẵn, emerald = thêm/sửa, cam = nhánh chặn · click để pause</p>
+</div>
+<main>
+
+<div class="diagram-box">
+  <div class="diagram-title">Task 1 — Khai báo R7 vào policy <span class="diagram-agent">Claude main</span></div>
+  <div class="caption"><span class="stepno">▶</span><span class="captext">…</span></div>
+  <svg viewBox="0 0 940 200" xmlns="http://www.w3.org/2000/svg">
+    <defs><marker id="m1n" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#059669"/></marker></defs>
+    <g><rect x="40" y="10" width="130" height="34" rx="8" fill="rgba(255,255,255,.85)" stroke="#6366f1" stroke-width="2"/><text x="105" y="31" text-anchor="middle" font-size="11" font-weight="700" fill="#4338ca">Claude</text><line x1="105" y1="44" x2="105" y2="186" stroke="#6366f1" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="380" y="10" width="160" height="34" rx="8" fill="rgba(16,185,129,.12)" stroke="#059669" stroke-width="2"/><text x="460" y="31" text-anchor="middle" font-size="11" font-weight="700" fill="#047857">harness/policy.yaml</text><line x1="460" y1="44" x2="460" y2="186" stroke="#059669" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="730" y="10" width="160" height="34" rx="8" fill="rgba(16,185,129,.12)" stroke="#059669" stroke-width="2"/><text x="810" y="31" text-anchor="middle" font-size="11" font-weight="700" fill="#047857">harness/recipe.md</text><line x1="810" y1="44" x2="810" y2="186" stroke="#059669" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g class="msg" data-cap="1 · Thêm block R7 proposal-complete: statement, validator, enforce_at [session, repo], scope = draft có ## Plan"><line x1="105" y1="80" x2="452" y2="80" stroke="#059669" stroke-width="2" marker-end="url(#m1n)"/><text class="lbl" x="278" y="72" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">+ R7: proposal-complete</text></g>
+    <g class="msg" data-cap="2 · Khai báo điều kiện: Agent-table ≥1 row · seq html tồn tại · diagram-box ≥ số task"><line x1="105" y1="120" x2="452" y2="120" stroke="#059669" stroke-width="2" marker-end="url(#m1n)"/><text class="lbl" x="278" y="112" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">điều kiện a/b/c dạng khai báo</text></g>
+    <g class="msg" data-cap="3 · recipe.md: bảng validators thêm dòng R7 — vendor mới cook theo cùng contract"><line x1="105" y1="160" x2="802" y2="160" stroke="#059669" stroke-width="2" marker-end="url(#m1n)"/><text class="lbl" x="455" y="152" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">recipe: + R7 vào bảng rule</text></g>
+  </svg>
+</div>
+
+<div class="diagram-box">
+  <div class="diagram-title">Task 2 — Validator proposal_complete.py <span class="diagram-agent">Claude main</span></div>
+  <div class="caption"><span class="stepno">▶</span><span class="captext">…</span></div>
+  <svg viewBox="0 0 940 260" xmlns="http://www.w3.org/2000/svg">
+    <defs><marker id="m2n" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#059669"/></marker><marker id="m2w" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#d97706"/></marker></defs>
+    <g><rect x="30" y="10" width="150" height="34" rx="8" fill="rgba(16,185,129,.12)" stroke="#059669" stroke-width="2"/><text x="105" y="31" text-anchor="middle" font-size="10.5" font-weight="700" fill="#047857">proposal_complete.py ✚</text><line x1="105" y1="44" x2="105" y2="246" stroke="#059669" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="330" y="10" width="160" height="34" rx="8" fill="rgba(255,255,255,.85)" stroke="#6366f1" stroke-width="2"/><text x="410" y="31" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">draft .md (Status: proposed)</text><line x1="410" y1="44" x2="410" y2="246" stroke="#6366f1" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="630" y="10" width="140" height="34" rx="8" fill="rgba(255,255,255,.85)" stroke="#6366f1" stroke-width="2"/><text x="700" y="31" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">file -seq.html</text><line x1="700" y1="44" x2="700" y2="246" stroke="#6366f1" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g class="msg" data-cap="1 · Parse draft: chỉ enforce khi CÓ '## Plan' và Status còn 'proposed' — output-report và draft đã implemented tự miễn"><line x1="105" y1="80" x2="402" y2="80" stroke="#059669" stroke-width="2" marker-end="url(#m2n)"/><text class="lbl" x="253" y="72" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">parse Plan + Status</text></g>
+    <g class="msg" data-cap="2 · Check (a): bảng ## Agent Task Assignment ≥1 row, không ô Agent trống → thiếu = exit 2 'proposal chưa khai ai làm'"><line x1="105" y1="120" x2="402" y2="120" stroke="#059669" stroke-width="2" marker-end="url(#m2n)"/><text class="lbl" x="253" y="112" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">(a) Agent table đủ và không trống</text></g>
+    <g class="msg" data-cap="3 · Check (b): link **Sequence diagram** phải trỏ tới file .html TỒN TẠI trên disk"><line x1="105" y1="160" x2="692" y2="160" stroke="#059669" stroke-width="2" marker-end="url(#m2n)"/><text class="lbl" x="398" y="152" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">(b) seq html tồn tại</text></g>
+    <g class="msg" data-cap="4 · Check (c): đếm diagram-box trong html ≥ số task '- [ ]' trong Plan — mỗi phần việc phải có diagram riêng, thiếu = exit 2 kèm số đếm"><line x1="700" y1="200" x2="113" y2="200" stroke="#d97706" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#m2w)"/><text class="lbl" x="406" y="192" text-anchor="middle" font-size="10" font-weight="600" fill="#b45309">(c) diagram-box ≥ task count, thiếu → exit 2</text></g>
+  </svg>
+</div>
+
+<div class="diagram-box">
+  <div class="diagram-title">Task 3 — Wire vào máy + test <span class="diagram-agent">Claude main</span></div>
+  <div class="caption"><span class="stepno">▶</span><span class="captext">…</span></div>
+  <svg viewBox="0 0 940 240" xmlns="http://www.w3.org/2000/svg">
+    <defs><marker id="m3n" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#059669"/></marker><marker id="m3w" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#d97706"/></marker></defs>
+    <g><rect x="30" y="10" width="130" height="34" rx="8" fill="rgba(255,255,255,.85)" stroke="#6366f1" stroke-width="2"/><text x="95" y="31" text-anchor="middle" font-size="11" font-weight="700" fill="#4338ca">Agent ghi draft</text><line x1="95" y1="44" x2="95" y2="226" stroke="#6366f1" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="300" y="10" width="160" height="34" rx="8" fill="rgba(16,185,129,.12)" stroke="#059669" stroke-width="2"/><text x="380" y="31" text-anchor="middle" font-size="10.5" font-weight="700" fill="#047857">PostToolUse + R7 ✚</text><line x1="380" y1="44" x2="380" y2="226" stroke="#059669" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="600" y="10" width="150" height="34" rx="8" fill="rgba(16,185,129,.12)" stroke="#059669" stroke-width="2"/><text x="675" y="31" text-anchor="middle" font-size="10.5" font-weight="700" fill="#047857">pre-commit + R7 ✚</text><line x1="675" y1="44" x2="675" y2="226" stroke="#059669" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g class="msg" data-cap="1 · Agent vừa Write draft proposal → PostToolUse gọi proposal_complete.py ngay trong phiên"><line x1="95" y1="80" x2="372" y2="80" stroke="#059669" stroke-width="2" marker-end="url(#m3n)"/><text class="lbl" x="233" y="72" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">Write draft → R7 chạy ngay</text></g>
+    <g class="msg" data-cap="2 · Thiếu Agent table / seq html / diagram per-task → exit 2, stderr ép agent bổ sung TRƯỚC khi dám hỏi 'Duyệt không?'"><line x1="380" y1="120" x2="103" y2="120" stroke="#d97706" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#m3w)"/><text class="lbl" x="241" y="112" text-anchor="middle" font-size="10" font-weight="600" fill="#b45309">exit 2 → bổ sung rồi mới được gate</text></g>
+    <g class="msg" data-cap="3 · Lớp 2: pre-commit chạy lại đúng validator trên draft staged — proposal lọt lưới phiên cũng không commit được"><line x1="380" y1="160" x2="667" y2="160" stroke="#059669" stroke-width="2" marker-end="url(#m3n)"/><text class="lbl" x="523" y="152" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">cùng script, gate commit</text></g>
+    <g class="msg" data-cap="4 · Test sandbox: draft thiếu từng thứ một (table/html/diagram-count) phải exit 2; draft đủ + output-report phải pass"><line x1="675" y1="200" x2="103" y2="200" stroke="#059669" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#m3n)"/><text class="lbl" x="389" y="192" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">test đủ nhánh pass/fail</text></g>
+  </svg>
+</div>
+
+<div class="diagram-box">
+  <div class="diagram-title">Task 4 — Template propose mới trong 4 skill <span class="diagram-agent">Claude main</span></div>
+  <div class="caption"><span class="stepno">▶</span><span class="captext">…</span></div>
+  <svg viewBox="0 0 940 220" xmlns="http://www.w3.org/2000/svg">
+    <defs><marker id="m4n" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#059669"/></marker></defs>
+    <g><rect x="30" y="10" width="130" height="34" rx="8" fill="rgba(255,255,255,.85)" stroke="#6366f1" stroke-width="2"/><text x="95" y="31" text-anchor="middle" font-size="11" font-weight="700" fill="#4338ca">Claude</text><line x1="95" y1="44" x2="95" y2="206" stroke="#6366f1" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="300" y="10" width="180" height="34" rx="8" fill="rgba(16,185,129,.12)" stroke="#059669" stroke-width="2"/><text x="390" y="31" text-anchor="middle" font-size="10.5" font-weight="700" fill="#047857">propose SKILL (global+tpl)</text><line x1="390" y1="44" x2="390" y2="206" stroke="#059669" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="620" y="10" width="200" height="34" rx="8" fill="rgba(16,185,129,.12)" stroke="#059669" stroke-width="2"/><text x="720" y="31" text-anchor="middle" font-size="10.5" font-weight="700" fill="#047857">orca-workflow SKILL (global+tpl)</text><line x1="720" y1="44" x2="720" y2="206" stroke="#059669" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g class="msg" data-cap="1 · Template propose thêm section BẮT BUỘC: ## Agent Task Assignment (Task | Agent CLI | Lý do chọn | Status=pending) — khai NGAY LÚC PROPOSE, chọn theo bảng chi phí agent"><line x1="95" y1="84" x2="382" y2="84" stroke="#059669" stroke-width="2" marker-end="url(#m4n)"/><text class="lbl" x="238" y="76" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">+ Agent table lúc propose</text></g>
+    <g class="msg" data-cap="2 · Yêu cầu seq đổi từ 'per flow' → 'MỖI task trong Plan một diagram, gắn badge agent phụ trách'"><line x1="95" y1="128" x2="382" y2="128" stroke="#059669" stroke-width="2" marker-end="url(#m4n)"/><text class="lbl" x="238" y="120" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">seq per-task + badge agent</text></g>
+    <g class="msg" data-cap="3 · orca-workflow Bước 2: cùng yêu cầu; Output Report giữ bảng cũ nhưng giờ chỉ là CẬP NHẬT status của bảng đã khai lúc propose"><line x1="95" y1="172" x2="712" y2="172" stroke="#059669" stroke-width="2" marker-end="url(#m4n)"/><text class="lbl" x="403" y="164" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">Bước 2 đồng bộ + Output Report = update status</text></g>
+  </svg>
+</div>
+
+<div class="diagram-box">
+  <div class="diagram-title">Task 5 — Sync template repo <span class="diagram-agent">Claude main</span></div>
+  <div class="caption"><span class="stepno">▶</span><span class="captext">…</span></div>
+  <svg viewBox="0 0 940 200" xmlns="http://www.w3.org/2000/svg">
+    <defs><marker id="m5n" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#059669"/></marker></defs>
+    <g><rect x="30" y="10" width="130" height="34" rx="8" fill="rgba(255,255,255,.85)" stroke="#6366f1" stroke-width="2"/><text x="95" y="31" text-anchor="middle" font-size="11" font-weight="700" fill="#4338ca">Claude</text><line x1="95" y1="44" x2="95" y2="186" stroke="#6366f1" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="360" y="10" width="180" height="34" rx="8" fill="rgba(255,255,255,.85)" stroke="#6366f1" stroke-width="2"/><text x="450" y="31" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">rheinmir/setup@orca</text><line x1="450" y1="44" x2="450" y2="186" stroke="#6366f1" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="700" y="10" width="190" height="34" rx="8" fill="rgba(255,255,255,.85)" stroke="#6366f1" stroke-width="2"/><text x="795" y="31" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">mọi project pull sau này</text><line x1="795" y1="44" x2="795" y2="186" stroke="#6366f1" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g class="msg" data-cap="1 · Push: policy.yaml + proposal_complete.py + hooks + pre-commit + 4 skill"><line x1="95" y1="84" x2="442" y2="84" stroke="#059669" stroke-width="2" marker-end="url(#m5n)"/><text class="lbl" x="268" y="76" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">push R7 trọn bộ</text></g>
+    <g class="msg" data-cap="2 · Clone verify lại đúng nội dung trên orca HEAD"><line x1="450" y1="124" x2="103" y2="124" stroke="#059669" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#m5n)"/><text class="lbl" x="276" y="116" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">clone verify</text></g>
+    <g class="msg" data-cap="3 · Từ giờ project nào pull template / npx skills add đều có R7: proposal thiếu task-list hay seq per-task là máy chặn, không phải nhờ model nhớ"><line x1="450" y1="164" x2="787" y2="164" stroke="#059669" stroke-width="2" marker-end="url(#m5n)"/><text class="lbl" x="618" y="156" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">mọi project sau hưởng R7</text></g>
+  </svg>
+</div>
+
+</main>
+<footer>Cặp md: <a href="../wiki/draft/orca/110626-proposal-enforcement.md">110626-proposal-enforcement.md</a> · recipe: <a href="../../harness/recipe.md">harness/recipe.md</a></footer>
+<script>
+document.querySelectorAll('.diagram-box').forEach(box=>{
+  const svg=box.querySelector('svg');if(!svg)return;
+  const msgs=[...svg.querySelectorAll('g.msg')];
+  const captext=box.querySelector('.captext'),stepno=box.querySelector('.stepno');
+  let i=0,paused=false,timer=null;const STEP=1700,HOLD=3000;
+  function tick(){if(paused)return;
+    if(i<msgs.length){msgs.forEach(m=>m.classList.remove('cur'));
+      msgs[i].classList.add('on','cur');captext.textContent=msgs[i].dataset.cap;
+      stepno.textContent=(i+1)+'/'+msgs.length;i++;timer=setTimeout(tick,STEP);}
+    else{timer=setTimeout(()=>{if(paused)return;msgs.forEach(m=>m.classList.remove('on','cur'));i=0;tick();},HOLD);}}
+  box.addEventListener('click',()=>{paused=!paused;if(paused)clearTimeout(timer);else tick();});
+  setTimeout(tick,400);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sequence — harness-enforcement-stack (propose 100626)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2f0f7;--text-1:#0f0f12;--text-2:#4a4a55;
+  --legacy:#6366f1;--legacy-dark:#4338ca;--new:#059669;--new-dark:#047857;--warn:#d97706}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text-1);font-family:'Inter',-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;line-height:1.6}
+.hero{padding:56px 24px 8px;text-align:center;max-width:860px;margin:0 auto}
+.hero h1{font-size:clamp(26px,4vw,40px);font-weight:800;
+  background:linear-gradient(135deg,#6366f1,#a855f7,#ec4899);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin-top:10px;font-size:14px;color:var(--text-2)}
+.hero a{color:var(--legacy-dark)}
+.legend{display:flex;gap:12px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+.legend span{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;
+  background:rgba(255,255,255,.7);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.6);
+  border-radius:20px;padding:5px 13px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.dot.l{background:var(--legacy)}.dot.n{background:var(--new)}.dot.w{background:var(--warn)}
+main{max-width:1060px;margin:0 auto;padding:24px 24px 70px}
+.diagram-box{background:rgba(255,255,255,.7);backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.6);border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.06);
+  padding:22px;margin:26px 0;cursor:pointer;transition:box-shadow .2s}
+.diagram-box:hover{box-shadow:0 6px 28px rgba(0,0,0,.1)}
+.diagram-title{font-size:14px;font-weight:800;margin-bottom:2px}
+.diagram-sub{font-size:12px;color:var(--text-2);margin-bottom:10px}
+.caption{min-height:34px;display:flex;align-items:center;gap:9px;font-size:12.5px;font-weight:600;
+  background:rgba(0,0,0,.04);border-radius:10px;padding:6px 13px;margin-bottom:12px;color:var(--text-2)}
+.caption .stepno{flex-shrink:0;font-size:10.5px;font-weight:800;background:var(--legacy);color:#fff;border-radius:14px;padding:1px 9px}
+.caption.paused .stepno{background:#9494a3}
+svg{width:100%;height:auto;display:block;user-select:none}
+.msg{opacity:0;transition:opacity .35s ease}
+.msg.on{opacity:1}
+.msg.cur text.lbl{font-weight:800}
+footer{text-align:center;font-size:12px;color:#9494a3;padding:24px}
+footer a{color:var(--legacy-dark)}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Luồng code — harness enforcement stack</h1>
+  <p>Sequence diagram hoạt họa cho proposal <a href="../wiki/draft/orca/100626-harness-enforcement-stack.md"><code>100626-harness-enforcement-stack.md</code></a> (bản md chi tiết). Message hiện từng bước — <b>click vào diagram để pause/chạy tiếp</b>.</p>
+  <div class="legend">
+    <span><i class="dot l"></i> lifeline/message LEGACY</span>
+    <span><i class="dot n"></i> lifeline/message MỚI (proposal này thêm)</span>
+    <span><i class="dot w"></i> vi phạm bị chặn / phản hồi lỗi</span>
+  </div>
+</div>
+
+<main>
+
+<!-- ============ SEQ A ============ -->
+<div class="diagram-box">
+  <div class="diagram-title">① Agent ghi file wiki — PreToolUse chặn trước, PostToolUse bắt sau</div>
+  <div class="diagram-sub">Happy path + nhánh fail R2: file thiếu <code>## Origin</code> → agent bị buộc tự sửa ngay trong phiên</div>
+  <div class="caption"><span class="stepno">▶</span><span class="captext">Bấm vào diagram để pause · tự chạy lặp</span></div>
+  <svg viewBox="0 0 940 500" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="mA-l" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#6366f1"/></marker>
+      <marker id="mA-n" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#059669"/></marker>
+      <marker id="mA-w" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#d97706"/></marker>
+    </defs>
+    <!-- lifeline headers -->
+    <g><rect x="22" y="12" width="116" height="36" rx="8" fill="rgba(255,255,255,.85)" stroke="#6366f1" stroke-width="2"/><text x="80" y="34" text-anchor="middle" font-size="11" font-weight="700" fill="#4338ca">Claude</text><line x1="80" y1="48" x2="80" y2="478" stroke="#6366f1" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="177" y="12" width="116" height="36" rx="8" fill="rgba(255,255,255,.85)" stroke="#6366f1" stroke-width="2"/><text x="235" y="29" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">Claude Code</text><text x="235" y="42" text-anchor="middle" font-size="8.5" fill="#4a4a55">runtime</text><line x1="235" y1="48" x2="235" y2="478" stroke="#6366f1" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="342" y="12" width="116" height="36" rx="8" fill="rgba(16,185,129,.12)" stroke="#059669" stroke-width="2"/><text x="400" y="29" text-anchor="middle" font-size="10.5" font-weight="700" fill="#047857">PreToolUse ✚</text><text x="400" y="42" text-anchor="middle" font-size="8.5" fill="#4a4a55">hook</text><line x1="400" y1="48" x2="400" y2="478" stroke="#059669" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="507" y="12" width="116" height="36" rx="8" fill="rgba(16,185,129,.12)" stroke="#059669" stroke-width="2"/><text x="565" y="29" text-anchor="middle" font-size="10.5" font-weight="700" fill="#047857">PostToolUse ✚</text><text x="565" y="42" text-anchor="middle" font-size="8.5" fill="#4a4a55">hook</text><line x1="565" y1="48" x2="565" y2="478" stroke="#059669" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="662" y="12" width="116" height="36" rx="8" fill="rgba(16,185,129,.12)" stroke="#059669" stroke-width="2"/><text x="720" y="29" text-anchor="middle" font-size="10.5" font-weight="700" fill="#047857">validators/ ✚</text><text x="720" y="42" text-anchor="middle" font-size="8.5" fill="#4a4a55">R1 R2 R5</text><line x1="720" y1="48" x2="720" y2="478" stroke="#059669" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="807" y="12" width="116" height="36" rx="8" fill="rgba(16,185,129,.12)" stroke="#059669" stroke-width="2"/><text x="865" y="29" text-anchor="middle" font-size="10.5" font-weight="700" fill="#047857">audit ✚</text><text x="865" y="42" text-anchor="middle" font-size="8.5" fill="#4a4a55">.claude/audit/*.jsonl</text><line x1="865" y1="48" x2="865" y2="478" stroke="#059669" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <!-- messages -->
+    <g class="msg" data-cap="1 · Claude quyết định ghi file wiki — gọi tool Write"><line x1="80" y1="88" x2="227" y2="88" stroke="#6366f1" stroke-width="2" marker-end="url(#mA-l)"/><text class="lbl" x="154" y="80" text-anchor="middle" font-size="10" font-weight="600" fill="#4338ca">Write(wiki/concepts/x.md)</text></g>
+    <g class="msg" data-cap="2 · Runtime đẩy payload JSON vào PreToolUse hook qua stdin — TRƯỚC khi tool chạy"><line x1="235" y1="126" x2="392" y2="126" stroke="#059669" stroke-width="2" marker-end="url(#mA-n)"/><text class="lbl" x="316" y="118" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">payload JSON (stdin)</text></g>
+    <g class="msg" data-cap="3 · Hook normalize payload → gọi validator R1 (no-write-raw) + R5 (folder-structure) qua subprocess"><line x1="400" y1="164" x2="712" y2="164" stroke="#059669" stroke-width="2" marker-end="url(#mA-n)"/><text class="lbl" x="556" y="156" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">R1 + R5 (event JSON chuẩn hóa)</text></g>
+    <g class="msg" data-cap="4 · Validators trả exit 0 = pass. (Nếu vi phạm: exit 2 → tool bị DENY, stderr quay về Claude)"><line x1="720" y1="202" x2="408" y2="202" stroke="#059669" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#mA-n)"/><text class="lbl" x="560" y="194" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">exit 0 — pass (vi phạm thì exit 2 = DENY)</text></g>
+    <g class="msg" data-cap="5 · Hook cho qua → runtime thực thi Write, file nằm trên disk"><line x1="400" y1="240" x2="243" y2="240" stroke="#059669" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#mA-n)"/><text class="lbl" x="318" y="232" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">allow → tool chạy, ghi disk</text></g>
+    <g class="msg" data-cap="6 · Sau khi tool chạy xong, runtime gọi PostToolUse hook với cùng payload"><line x1="235" y1="278" x2="557" y2="278" stroke="#059669" stroke-width="2" marker-end="url(#mA-n)"/><text class="lbl" x="396" y="270" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">PostToolUse: payload</text></g>
+    <g class="msg" data-cap="7 · Hook gọi R2 origin_required — validator ĐỌC FILE TRÊN DISK (trạng thái cuối, không tin content trong payload)"><line x1="565" y1="316" x2="712" y2="316" stroke="#059669" stroke-width="2" marker-end="url(#mA-n)"/><text class="lbl" x="639" y="308" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">R2 origin (đọc disk)</text></g>
+    <g class="msg" data-cap="8 · File thiếu '## Origin' → exit 2, lý do ghi trên stderr"><line x1="720" y1="354" x2="573" y2="354" stroke="#d97706" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#mA-w)"/><text class="lbl" x="647" y="346" text-anchor="middle" font-size="10" font-weight="600" fill="#b45309">exit 2 — thiếu ## Origin</text></g>
+    <g class="msg" data-cap="9 · stderr được đưa lại cho Claude → Claude buộc phải sửa file ngay trong phiên, không thể lờ đi"><line x1="565" y1="392" x2="88" y2="392" stroke="#d97706" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#mA-w)"/><text class="lbl" x="326" y="384" text-anchor="middle" font-size="10" font-weight="600" fill="#b45309">stderr: "thêm ## Origin" → Claude tự sửa</text></g>
+    <g class="msg" data-cap="10 · Song song, hook append bản ghi vào audit JSONL — máy ghi log, model không thể quên"><line x1="565" y1="430" x2="857" y2="430" stroke="#059669" stroke-width="2" marker-end="url(#mA-n)"/><text class="lbl" x="711" y="422" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">append JSONL (R4 tự động)</text></g>
+  </svg>
+</div>
+
+<!-- ============ SEQ B ============ -->
+<div class="diagram-box">
+  <div class="diagram-title">② git commit — L2 backstop vendor-neutral</div>
+  <div class="diagram-sub">Agent NÀO commit (Claude, OpenCode, Codex, cả con người) cũng đi qua đúng các validator này — hàng rào cứng cuối cùng</div>
+  <div class="caption"><span class="stepno">▶</span><span class="captext">Bấm vào diagram để pause · tự chạy lặp</span></div>
+  <svg viewBox="0 0 940 360" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="mB-l" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#6366f1"/></marker>
+      <marker id="mB-n" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#059669"/></marker>
+      <marker id="mB-w" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#d97706"/></marker>
+    </defs>
+    <g><rect x="32" y="12" width="136" height="36" rx="8" fill="rgba(255,255,255,.85)" stroke="#6366f1" stroke-width="2"/><text x="100" y="29" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">Agent bất kỳ / người</text><text x="100" y="42" text-anchor="middle" font-size="8.5" fill="#4a4a55">vendor nào cũng vậy</text><line x1="100" y1="48" x2="100" y2="338" stroke="#6366f1" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="232" y="12" width="116" height="36" rx="8" fill="rgba(255,255,255,.85)" stroke="#6366f1" stroke-width="2"/><text x="290" y="34" text-anchor="middle" font-size="11" font-weight="700" fill="#4338ca">git</text><line x1="290" y1="48" x2="290" y2="338" stroke="#6366f1" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="422" y="12" width="116" height="36" rx="8" fill="rgba(16,185,129,.12)" stroke="#059669" stroke-width="2"/><text x="480" y="29" text-anchor="middle" font-size="10.5" font-weight="700" fill="#047857">pre-commit ✚</text><text x="480" y="42" text-anchor="middle" font-size="8.5" fill="#4a4a55">.pre-commit-config.yaml</text><line x1="480" y1="48" x2="480" y2="338" stroke="#059669" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="612" y="12" width="116" height="36" rx="8" fill="rgba(16,185,129,.12)" stroke="#059669" stroke-width="2"/><text x="670" y="29" text-anchor="middle" font-size="10.5" font-weight="700" fill="#047857">validators/ ✚</text><text x="670" y="42" text-anchor="middle" font-size="8.5" fill="#4a4a55">cùng script với L1</text><line x1="670" y1="48" x2="670" y2="338" stroke="#059669" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="792" y="12" width="126" height="36" rx="8" fill="rgba(16,185,129,.12)" stroke="#059669" stroke-width="2"/><text x="855" y="29" text-anchor="middle" font-size="10.5" font-weight="700" fill="#047857">wiki-health ✚</text><text x="855" y="42" text-anchor="middle" font-size="8.5" fill="#4a4a55">--fail-on broken</text><line x1="855" y1="48" x2="855" y2="338" stroke="#059669" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g class="msg" data-cap="1 · Bất kỳ ai (agent vendor nào, hay chính bạn) chạy git commit"><line x1="100" y1="88" x2="282" y2="88" stroke="#6366f1" stroke-width="2" marker-end="url(#mB-l)"/><text class="lbl" x="190" y="80" text-anchor="middle" font-size="10" font-weight="600" fill="#4338ca">git commit</text></g>
+    <g class="msg" data-cap="2 · git kích hoạt pre-commit framework với danh sách file đang staged"><line x1="290" y1="126" x2="472" y2="126" stroke="#059669" stroke-width="2" marker-end="url(#mB-n)"/><text class="lbl" x="380" y="118" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">hook chạy, staged files</text></g>
+    <g class="msg" data-cap="3 · R2 origin + R5 folder chạy ở chế độ argv — nhận thẳng danh sách file, không cần JSON"><line x1="480" y1="164" x2="662" y2="164" stroke="#059669" stroke-width="2" marker-end="url(#mB-n)"/><text class="lbl" x="570" y="156" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">R2 + R5 (argv: file list)</text></g>
+    <g class="msg" data-cap="4 · R3 index_sync so toàn bộ tập file wiki với index.md (always_run)"><line x1="480" y1="202" x2="662" y2="202" stroke="#059669" stroke-width="2" marker-end="url(#mB-n)"/><text class="lbl" x="570" y="194" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">R3 index_sync --wiki-dir</text></g>
+    <g class="msg" data-cap="5 · wiki-health quét broken wikilink — có là fail commit"><line x1="480" y1="240" x2="847" y2="240" stroke="#059669" stroke-width="2" marker-end="url(#mB-n)"/><text class="lbl" x="663" y="232" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">wiki-health --fail-on broken</text></g>
+    <g class="msg" data-cap="6 · Bất kỳ validator nào exit 2 → pre-commit fail, in danh sách vi phạm"><line x1="670" y1="278" x2="488" y2="278" stroke="#d97706" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#mB-w)"/><text class="lbl" x="578" y="270" text-anchor="middle" font-size="10" font-weight="600" fill="#b45309">exit 2 + danh sách vi phạm</text></g>
+    <g class="msg" data-cap="7 · Commit bị HỦY — sửa xong mới commit được. Pass hết thì commit tạo bình thường"><line x1="480" y1="316" x2="298" y2="316" stroke="#d97706" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#mB-w)"/><text class="lbl" x="388" y="308" text-anchor="middle" font-size="10" font-weight="600" fill="#b45309">FAIL → abort commit</text></g>
+  </svg>
+</div>
+
+<!-- ============ SEQ C ============ -->
+<div class="diagram-box">
+  <div class="diagram-title">③ Kết thúc phiên — Stop hook giữ index, SessionEnd tự ghi log</div>
+  <div class="diagram-sub">Claude không thể "dừng bừa" khi wiki đang lệch index; log phiên do máy sinh — kèm guard chống lặp vô hạn</div>
+  <div class="caption"><span class="stepno">▶</span><span class="captext">Bấm vào diagram để pause · tự chạy lặp</span></div>
+  <svg viewBox="0 0 940 440" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="mC-l" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#6366f1"/></marker>
+      <marker id="mC-n" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#059669"/></marker>
+      <marker id="mC-w" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#d97706"/></marker>
+    </defs>
+    <g><rect x="22" y="12" width="116" height="36" rx="8" fill="rgba(255,255,255,.85)" stroke="#6366f1" stroke-width="2"/><text x="80" y="34" text-anchor="middle" font-size="11" font-weight="700" fill="#4338ca">Claude</text><line x1="80" y1="48" x2="80" y2="418" stroke="#6366f1" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="177" y="12" width="116" height="36" rx="8" fill="rgba(255,255,255,.85)" stroke="#6366f1" stroke-width="2"/><text x="235" y="34" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">runtime</text><line x1="235" y1="48" x2="235" y2="418" stroke="#6366f1" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="342" y="12" width="116" height="36" rx="8" fill="rgba(16,185,129,.12)" stroke="#059669" stroke-width="2"/><text x="400" y="34" text-anchor="middle" font-size="10.5" font-weight="700" fill="#047857">Stop hook ✚</text><line x1="400" y1="48" x2="400" y2="418" stroke="#059669" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="497" y="12" width="116" height="36" rx="8" fill="rgba(255,255,255,.85)" stroke="#6366f1" stroke-width="2"/><text x="555" y="34" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">git</text><line x1="555" y1="48" x2="555" y2="418" stroke="#6366f1" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="652" y="12" width="116" height="36" rx="8" fill="rgba(16,185,129,.12)" stroke="#059669" stroke-width="2"/><text x="710" y="34" text-anchor="middle" font-size="10.5" font-weight="700" fill="#047857">index_sync ✚</text><line x1="710" y1="48" x2="710" y2="418" stroke="#059669" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g><rect x="807" y="12" width="116" height="36" rx="8" fill="rgba(255,255,255,.85)" stroke="#6366f1" stroke-width="2"/><text x="865" y="29" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">wiki/log.md</text><text x="865" y="42" text-anchor="middle" font-size="8.5" fill="#4a4a55">file cũ, nguồn mới</text><line x1="865" y1="48" x2="865" y2="418" stroke="#6366f1" stroke-width="1" stroke-dasharray="4 4" opacity=".45"/></g>
+    <g class="msg" data-cap="1 · Claude xong việc, muốn kết thúc lượt"><line x1="80" y1="88" x2="227" y2="88" stroke="#6366f1" stroke-width="2" marker-end="url(#mC-l)"/><text class="lbl" x="154" y="80" text-anchor="middle" font-size="10" font-weight="600" fill="#4338ca">kết thúc lượt</text></g>
+    <g class="msg" data-cap="2 · Runtime gọi Stop hook trước khi cho dừng"><line x1="235" y1="126" x2="392" y2="126" stroke="#059669" stroke-width="2" marker-end="url(#mC-n)"/><text class="lbl" x="316" y="118" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">Stop hook (payload)</text></g>
+    <g class="msg" data-cap="3 · Hook hỏi git: phiên này có đụng wiki/ không? Không đụng → cho dừng luôn, không can thiệp"><line x1="400" y1="164" x2="547" y2="164" stroke="#059669" stroke-width="2" marker-end="url(#mC-n)"/><text class="lbl" x="474" y="156" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">git status --porcelain</text></g>
+    <g class="msg" data-cap="4 · Có file wiki/ thay đổi → cần kiểm index"><line x1="555" y1="202" x2="408" y2="202" stroke="#6366f1" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#mC-l)"/><text class="lbl" x="482" y="194" text-anchor="middle" font-size="10" font-weight="600" fill="#4338ca">wiki/ có thay đổi</text></g>
+    <g class="msg" data-cap="5 · Gọi R3 index_sync với wiki_dir"><line x1="400" y1="240" x2="702" y2="240" stroke="#059669" stroke-width="2" marker-end="url(#mC-n)"/><text class="lbl" x="551" y="232" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">index_sync(wiki_dir)</text></g>
+    <g class="msg" data-cap="6 · index.md lệch với tập file thực tế → exit 2, liệt kê thiếu/thừa"><line x1="710" y1="278" x2="408" y2="278" stroke="#d97706" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#mC-w)"/><text class="lbl" x="559" y="270" text-anchor="middle" font-size="10" font-weight="600" fill="#b45309">exit 2 — index lệch (thiếu/thừa)</text></g>
+    <g class="msg" data-cap="7 · BLOCK: Claude không được dừng — phải cập nhật index.md trước"><line x1="400" y1="316" x2="88" y2="316" stroke="#d97706" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#mC-w)"/><text class="lbl" x="244" y="308" text-anchor="middle" font-size="10" font-weight="600" fill="#b45309">BLOCK: "cập nhật index.md rồi mới dừng"</text></g>
+    <g class="msg" data-cap="8 · Claude sửa index → dừng lần 2. Payload có stop_hook_active=true → guard cho qua, không lặp vô hạn"><line x1="80" y1="354" x2="227" y2="354" stroke="#6366f1" stroke-width="2" marker-end="url(#mC-l)"/><text class="lbl" x="154" y="346" text-anchor="middle" font-size="10" font-weight="600" fill="#4338ca">sửa index → dừng lần 2 (guard OK)</text></g>
+    <g class="msg" data-cap="9 · SessionEnd: máy đọc audit JSONL, append dòng tổng kết phiên vào log.md — R4 hoàn thành tự động"><line x1="235" y1="392" x2="857" y2="392" stroke="#059669" stroke-width="2" marker-end="url(#mC-n)"/><text class="lbl" x="546" y="384" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">SessionEnd → append tổng kết phiên</text></g>
+  </svg>
+</div>
+
+</main>
+<footer>Cặp với bản md chi tiết: <a href="../wiki/draft/orca/100626-harness-enforcement-stack.md">100626-harness-enforcement-stack.md</a> · báo cáo tổng: <a href="100626-harness-report.html">100626-harness-report.html</a></footer>
+
+<script>
+document.querySelectorAll('.diagram-box').forEach(box=>{
+  const svg=box.querySelector('svg');if(!svg)return;
+  const msgs=[...svg.querySelectorAll('g.msg')];
+  const captext=box.querySelector('.captext');
+  const stepno=box.querySelector('.stepno');
+  const capbar=box.querySelector('.caption');
+  let i=0,paused=false,timer=null;
+  const STEP=1500,HOLD=3200;
+  function tick(){
+    if(paused)return;
+    if(i<msgs.length){
+      msgs.forEach(m=>m.classList.remove('cur'));
+      msgs[i].classList.add('on','cur');
+      captext.textContent=msgs[i].dataset.cap;
+      stepno.textContent=(i+1)+'/'+msgs.length;
+      i++;
+      timer=setTimeout(tick,STEP);
+    }else{
+      timer=setTimeout(()=>{if(paused)return;
+        msgs.forEach(m=>m.classList.remove('on','cur'));i=0;tick();},HOLD);
+    }
+  }
+  box.addEventListener('click',()=>{
+    paused=!paused;capbar.classList.toggle('paused',paused);
+    if(paused){clearTimeout(timer);stepno.textContent='⏸ '+stepno.textContent.replace(/^⏸ /,'')}
+    else{stepno.textContent=stepno.textContent.replace(/^⏸ /,'');tick()}
+  });
+  setTimeout(tick,400+Math.floor(Math.random()*1)*0);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+# macOS / runtime
+.DS_Store
+graph.db
+nohup.out
+*.bak.*
+
+# harness runtime data (baseline/trend sinh ra khi chạy — không phải source)
+harness/metrics/
