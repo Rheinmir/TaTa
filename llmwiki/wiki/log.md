@@ -57,3 +57,9 @@
 - Cài harness L0–L4 (validators, hooks, pre-commit, wiki-health, evals)
 
 ## 2026-06-11 — harness-update — update xong, nợ backfill: 0 file (đã sạch từ trước)
+
+## 2026-06-12 — arch-audit — quét xung đột kiến trúc toàn luồng
+- Bỏ flag bị classifier chặn khỏi orca-workflow.md + orca-dispatch-reference.md (template)
+- Sửa 5 path stale llmwiki/skills/wiki/propose.md → dev-loop/propose.md (dispatch-reference)
+- CLAUDE.md/AGENT.md: rule folder thêm draft/ cho khớp R5
+- False positive đã loại: wiki/raw|skills (substring llmwiki), raw/ trong new-project-setup (smoke test phải-bị-chặn)
