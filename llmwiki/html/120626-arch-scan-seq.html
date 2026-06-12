@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sequence per-task — arch-scan (120626)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+body{background:#f2f0f7;color:#0f0f12;font-family:'Inter',sans-serif;line-height:1.6;margin:0}
+.hero{padding:44px 24px 6px;text-align:center;max-width:840px;margin:0 auto}
+.hero h1{font-size:clamp(20px,3.5vw,30px);font-weight:800;background:linear-gradient(135deg,#6366f1,#a855f7,#ec4899);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{font-size:13px;color:#4a4a55}.hero a{color:#4338ca}
+main{max-width:1020px;margin:0 auto;padding:14px 24px 50px}
+.diagram-box{background:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.6);border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.06);padding:18px;margin:16px 0;cursor:pointer}
+.dt{font-size:13px;font-weight:800;margin-bottom:4px}
+.badge{font-size:10px;font-weight:800;border-radius:14px;padding:2px 9px;background:rgba(99,102,241,.12);color:#4338ca;margin-left:6px}
+.caption{min-height:30px;display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;background:rgba(0,0,0,.04);border-radius:10px;padding:5px 12px;margin-bottom:10px;color:#4a4a55}
+.caption .stepno{font-size:10px;font-weight:800;background:#6366f1;color:#fff;border-radius:14px;padding:1px 8px;flex-shrink:0}
+svg{width:100%;height:auto;display:block}.msg{opacity:0;transition:opacity .35s}.msg.on{opacity:1}.msg.cur text{font-weight:800}
+footer{text-align:center;font-size:12px;color:#9494a3;padding:20px}footer a{color:#4338ca}
+</style></head><body>
+<div class="hero"><h1>arch-scan — quét định kỳ văn-bản-vs-luật</h1>
+<p>Propose: <a href="../wiki/draft/orca/120626-arch-scan.md">120626-arch-scan.md</a> · mỗi task một diagram · click pause</p></div>
+<main>
+<div class="diagram-box"><div class="dt">Task 1 — Scanner 4 check <span class="badge">Claude main</span></div>
+<div class="caption"><span class="stepno">▶</span><span class="captext">…</span></div>
+<svg viewBox="0 0 940 170" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="a1" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#059669"/></marker></defs>
+<g><rect x="30" y="10" width="150" height="32" rx="8" fill="rgba(16,185,129,.12)" stroke="#059669" stroke-width="2"/><text x="105" y="30" text-anchor="middle" font-size="10.5" font-weight="700" fill="#047857">arch-scan.py ✚</text><line x1="105" y1="42" x2="105" y2="158" stroke="#059669" stroke-dasharray="4 4" opacity=".45"/></g>
+<g><rect x="400" y="10" width="180" height="32" rx="8" fill="rgba(255,255,255,.85)" stroke="#6366f1" stroke-width="2"/><text x="490" y="30" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">skill/doc files (76)</text><line x1="490" y1="42" x2="490" y2="158" stroke="#6366f1" stroke-dasharray="4 4" opacity=".45"/></g>
+<g class="msg" data-cap="1 · Quét từng dòng: C1 flag bị classifier chặn (bỏ qua dòng cảnh báo) · C2 wiki/<dir>/ ngoài R5 (lookbehind chống llmwiki/) · C3 path skill stale · C4 file wiki root lạ"><line x1="105" y1="78" x2="392" y2="78" stroke="#059669" stroke-width="2" marker-end="url(#a1)"/><text x="248" y="70" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">C1+C2+C3+C4 per line</text></g>
+<g class="msg" data-cap="2 · Có finding → exit 2 + liệt kê file:line; --warn-only cho cron. Lần chạy đầu bắt luôn 8 finding audit tay bỏ sót"><line x1="490" y1="120" x2="113" y2="120" stroke="#d97706" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a1)"/><text x="300" y="112" text-anchor="middle" font-size="10" font-weight="600" fill="#b45309">exit 2 + danh sách file:line</text></g>
+</svg></div>
+<div class="diagram-box"><div class="dt">Task 2 — Wire pre-commit + test <span class="badge">Claude main</span></div>
+<div class="caption"><span class="stepno">▶</span><span class="captext">…</span></div>
+<svg viewBox="0 0 940 170" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="a2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#059669"/></marker></defs>
+<g><rect x="30" y="10" width="130" height="32" rx="8" fill="rgba(255,255,255,.85)" stroke="#6366f1" stroke-width="2"/><text x="95" y="30" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">git commit</text><line x1="95" y1="42" x2="95" y2="158" stroke="#6366f1" stroke-dasharray="4 4" opacity=".45"/></g>
+<g><rect x="400" y="10" width="180" height="32" rx="8" fill="rgba(16,185,129,.12)" stroke="#059669" stroke-width="2"/><text x="490" y="30" text-anchor="middle" font-size="10.5" font-weight="700" fill="#047857">pre-commit + arch-scan ✚</text><line x1="490" y1="42" x2="490" y2="158" stroke="#059669" stroke-dasharray="4 4" opacity=".45"/></g>
+<g class="msg" data-cap="1 · Mỗi commit: arch-scan always_run quét llmwiki/ — skill/doc lệch luật là commit bị hủy"><line x1="95" y1="78" x2="392" y2="78" stroke="#059669" stroke-width="2" marker-end="url(#a2)"/><text x="243" y="70" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">always_run mỗi commit</text></g>
+<g class="msg" data-cap="2 · Test: repo sạch rc=0; file cố tình lỗi bắt đủ 4 loại rc=2"><line x1="490" y1="120" x2="103" y2="120" stroke="#059669" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a2)"/><text x="296" y="112" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">test 2 chiều pass/fail</text></g>
+</svg></div>
+<div class="diagram-box"><div class="dt">Task 3 — Sync template <span class="badge">Claude main</span></div>
+<div class="caption"><span class="stepno">▶</span><span class="captext">…</span></div>
+<svg viewBox="0 0 940 140" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="a3" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#059669"/></marker></defs>
+<g><rect x="30" y="10" width="130" height="32" rx="8" fill="rgba(255,255,255,.85)" stroke="#6366f1" stroke-width="2"/><text x="95" y="30" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">repo này</text><line x1="95" y1="42" x2="95" y2="128" stroke="#6366f1" stroke-dasharray="4 4" opacity=".45"/></g>
+<g><rect x="400" y="10" width="200" height="32" rx="8" fill="rgba(255,255,255,.85)" stroke="#6366f1" stroke-width="2"/><text x="500" y="30" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4338ca">rheinmir/setup@orca</text><line x1="500" y1="42" x2="500" y2="128" stroke="#6366f1" stroke-dasharray="4 4" opacity=".45"/></g>
+<g class="msg" data-cap="1 · Push arch-scan.py + pre-commit + 5 skill đã fix — mọi project pull template có luôn máy quét"><line x1="95" y1="85" x2="392" y2="85" stroke="#059669" stroke-width="2" marker-end="url(#a3)"/><text x="243" y="77" text-anchor="middle" font-size="10" font-weight="600" fill="#047857">push trọn bộ → mọi project hưởng</text></g>
+</svg></div>
+</main>
+<footer><a href="../wiki/draft/orca/120626-arch-scan.md">bản md</a></footer>
+<script>
+document.querySelectorAll('.diagram-box').forEach(box=>{const svg=box.querySelector('svg');if(!svg)return;
+const m=[...svg.querySelectorAll('g.msg')],c=box.querySelector('.captext'),n=box.querySelector('.stepno');
+let i=0,p=false,t=null;function tick(){if(p)return;if(i<m.length){m.forEach(x=>x.classList.remove('cur'));
+m[i].classList.add('on','cur');c.textContent=m[i].dataset.cap;n.textContent=(i+1)+'/'+m.length;i++;t=setTimeout(tick,1900);}
+else{t=setTimeout(()=>{if(p)return;m.forEach(x=>x.classList.remove('on','cur'));i=0;tick();},3000);}}
+box.addEventListener('click',()=>{p=!p;if(p)clearTimeout(t);else tick();});setTimeout(tick,400);});
+</script></body></html>

@@ -63,3 +63,7 @@
 - Sửa 5 path stale llmwiki/skills/wiki/propose.md → dev-loop/propose.md (dispatch-reference)
 - CLAUDE.md/AGENT.md: rule folder thêm draft/ cho khớp R5
 - False positive đã loại: wiki/raw|skills (substring llmwiki), raw/ trong new-project-setup (smoke test phải-bị-chặn)
+
+## 2026-06-12 — orca-workflow — arch-scan
+- Scanner 4 check (C1 flag/C2 R5/C3 stale/C4 root-md), wire pre-commit always_run
+- Lần chạy đầu bắt 8 finding audit tay sót (orca-onboard template, onboard-codebase, path skills/setup/) — đã fix
