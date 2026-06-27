@@ -191,6 +191,12 @@ def trigger_cron_scan():
     new_tasks = scanner.run_cron_scan()
     return new_tasks
 
+# Review (HITL) API — Phase 3 · AI Hooks — Phase 5
+from app.review_api import router as review_router  # noqa: E402
+from app.hooks_api import router as hooks_router  # noqa: E402
+app.include_router(review_router)
+app.include_router(hooks_router)
+
 # Serve static frontend dashboard from FastAPI directly
 app.mount("/", StaticFiles(directory="llmwiki/html", html=True), name="frontend")
 

@@ -1,0 +1,14 @@
+teams_token.json
+zalo_session.json
+teams_session.json
+cred.txt
+litellm-azure-claude/.env
+litellm-azure-claude/.venv/
+litellm-azure-claude/dist/
+*.dmg
+
+# Phase 0 JSON fallback (dev store)
+tata_store_data/
+
+.env.caveman
+.env.prod

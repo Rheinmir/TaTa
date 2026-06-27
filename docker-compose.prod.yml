@@ -1,0 +1,38 @@
+# TaTa production — app FastAPI + Postgres (AI trích & giao việc).
+# Deploy: docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --build
+# Postgres tự chạy migrations/*.sql lần init đầu. App đọc TATA_DATABASE_URL + secrets từ .env.prod.
+name: tata-app
+
+services:
+  tata-app-db:
+    image: postgres:16-alpine
+    container_name: tata-app-db
+    env_file: .env.prod                       # POSTGRES_PASSWORD
+    environment:
+      POSTGRES_DB: tata
+      POSTGRES_USER: tata
+    volumes:
+      - tata_app_pgdata:/var/lib/postgresql/data
+      - ./migrations:/docker-entrypoint-initdb.d:ro   # auto-apply 0001,0002 lúc init đầu
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tata -d tata"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  tata-server:
+    build: .
+    container_name: tata-app-server
+    env_file: .env.prod                       # TATA_DATABASE_URL + LLM/notify/notion secrets
+    environment:
+      PORT: "8000"
+    depends_on:
+      tata-app-db:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8000:8000"                 # chỉ localhost → ra ngoài qua cloudflared/tunnel
+    restart: unless-stopped
+
+volumes:
+  tata_app_pgdata:
